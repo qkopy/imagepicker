@@ -73,6 +73,7 @@ public class ImagePickerAdapter extends BaseRecyclerViewAdapter<ImagePickerAdapt
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isSelection = true;
                 if (isSelection) {
                     boolean shouldSelect = itemClickListener.onImageClick(view, viewHolder.getAdapterPosition(), !isSelected);
                     if (isSelected) {
@@ -85,6 +86,7 @@ public class ImagePickerAdapter extends BaseRecyclerViewAdapter<ImagePickerAdapt
                 if (selectedImages.size() == 0) {
                     isSelection = false;
                 }
+
             }
         });
         viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
