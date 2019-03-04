@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by @ajithvgiri on 4/12/18 8:34 PM
+  ~ Copyright (c) 2018 . All rights reserved.
+  ~ Last modified 4/12/18 7:05 PM
+  -->
+
+<com.qkopy.gallery.widget.SquareFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        tools:override="false">
+
+    <ImageView
+            android:id="@+id/image_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <View
+            android:id="@+id/view_alpha"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+    <TextView
+            style="@style/GalleryTextSmall"
+            android:layout_gravity="bottom"
+            android:background="@color/black_alpha_50"
+            android:paddingBottom="@dimen/padding_small"
+            android:paddingLeft="@dimen/margin_medium"
+            android:paddingRight="@dimen/margin_medium"
+            android:paddingTop="@dimen/padding_small"
+            android:text="@string/text_gif"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"/>
+
+    <ImageView
+            android:id="@+id/gif_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/black_alpha_50"
+            android:src="@drawable/ic_gif_white_24dp"/>
+
+</com.qkopy.gallery.widget.SquareFrameLayout>

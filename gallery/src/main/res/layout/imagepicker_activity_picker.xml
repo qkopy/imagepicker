@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by @ajithvgiri on 4/12/18 8:33 PM
+  ~ Copyright (c) 2018 . All rights reserved.
+  ~ Last modified 4/12/18 7:05 PM
+  -->
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.qkopy.gallery.widget.ImagePickerToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"/>
+
+    <LinearLayout
+            android:id="@+id/layout_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_large"
+            android:visibility="gone">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/imagepicker_ic_image"/>
+
+        <TextView
+                style="@style/GalleryTextLarge"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center_horizontal"
+                android:text="@string/msg_no_images"
+                android:textColor="@color/grey"
+                android:textStyle="bold"/>
+    </LinearLayout>
+
+    <com.qkopy.gallery.widget.ProgressWheel
+            xmlns:wheel="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/progressWheel"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            wheel:matProg_barColor="@color/colorAccent"
+            wheel:matProg_progressIndeterminate="true"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:visibility="gone"/>
+
+    <com.qkopy.gallery.widget.SnackBarView
+            android:id="@+id/snackbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/recyclerView"
+            android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

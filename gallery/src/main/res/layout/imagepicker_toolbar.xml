@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="?attr/actionBarSize">
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_toolbar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_large"
+            android:src="@drawable/imagepicker_ic_back"/>
+
+
+    <TextView
+            android:id="@+id/text_toolbar_title"
+            style="@style/GalleryToolbarTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:text="Folder"
+            android:layout_toLeftOf="@+id/image_toolbar_camera"
+            android:layout_toRightOf="@id/image_toolbar_back"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:layout_toStartOf="@+id/image_toolbar_camera"
+            android:layout_toEndOf="@id/image_toolbar_back"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_toolbar_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/text_toolbar_count"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="16dp"
+            android:visibility="gone"
+            android:src="@drawable/imagepicker_ic_camera"/>
+
+
+    <TextView
+            android:id="@+id/text_toolbar_count"
+            style="@style/GalleryToolbarMenuText"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_large"
+            android:text="@string/action_done"
+            android:layout_toLeftOf="@+id/text_toolbar_done"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+    <TextView
+            android:id="@+id/text_toolbar_done"
+            style="@style/GalleryToolbarMenuText"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_large"
+            android:text="@string/action_done"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+</merge>
