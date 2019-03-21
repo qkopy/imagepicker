@@ -12,13 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.qkopy.gallery.R;
 import com.qkopy.gallery.listener.OnFolderClickListener;
 import com.qkopy.gallery.model.Folder;
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter;
-import com.qkopy.gallery.widget.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,17 @@ public class FolderPickerAdapter extends BaseRecyclerViewAdapter<FolderPickerAda
 
         final Folder folder = folders.get(position);
 
-        GlideApp.with(getContext())
+
+        Glide.with(getContext())
                 .load(folder.getImages().get(0).getPath())
-                .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .apply(
+                        new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .placeholder(R.drawable.image_placeholder)
+                                .error(R.drawable.image_placeholder)
+                                .centerCrop()
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                )
                 .into(holder.image);
 
         holder.name.setText(folder.getFolderName());

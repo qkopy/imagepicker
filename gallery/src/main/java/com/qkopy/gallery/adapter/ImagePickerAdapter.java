@@ -13,15 +13,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.qkopy.gallery.R;
 import com.qkopy.gallery.helper.ImageHelper;
 import com.qkopy.gallery.listener.OnImageClickListener;
 import com.qkopy.gallery.listener.OnImageSelectionListener;
 import com.qkopy.gallery.model.Image;
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter;
-import com.qkopy.gallery.widget.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +58,16 @@ public class ImagePickerAdapter extends BaseRecyclerViewAdapter<ImagePickerAdapt
         final Image image = images.get(position);
         final boolean isSelected = isSelected(image);
 
-        GlideApp.with(getContext()).
+        Glide.with(getContext()).
                 load(image.getPath()).
-                centerCrop().
                 transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .apply(
+                        new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .placeholder(R.drawable.image_placeholder)
+                                .error(R.drawable.image_placeholder)
+                                .centerCrop()
+                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                )
                 .into(viewHolder.image);
 
         viewHolder.gifIndicator.setVisibility(ImageHelper.isGifFormat(image) ? View.VISIBLE : View.GONE);
