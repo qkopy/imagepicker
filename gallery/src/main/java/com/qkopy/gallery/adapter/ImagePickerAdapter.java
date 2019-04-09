@@ -66,7 +66,6 @@ public class ImagePickerAdapter extends BaseRecyclerViewAdapter<ImagePickerAdapt
                                 .placeholder(R.drawable.image_placeholder)
                                 .error(R.drawable.image_placeholder)
                                 .centerCrop()
-                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 )
                 .into(viewHolder.image);
 

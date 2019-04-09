@@ -34,14 +34,13 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintLayoutVersion}"
-    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerViewVersion}"
-    implementation "androidx.legacy:legacy-support-v4:${rootProject.ext.legacySupportVersion}"
-    implementation "com.google.android.material:material:${rootProject.ext.materialVersion}"
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.appCompatVersion}"
-    implementation "com.github.bumptech.glide:glide:${rootProject.ext.glideVersion}"
-    kapt "com.github.bumptech.glide:compiler:${rootProject.ext.glideVersion}"
-    kapt "androidx.lifecycle:lifecycle-compiler:${rootProject.ext.archLifecycleVersion}"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0-alpha04'
     implementation 'io.fotoapparat:fotoapparat:2.6.1'
 
     //test
