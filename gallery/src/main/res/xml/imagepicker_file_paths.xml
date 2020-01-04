@@ -3,5 +3,5 @@
     <external-path
         name="imagepicker_images"
         path="." />
-    <cache-path name="image" path="image/"/>
+    <cache-path name="image" path="."/>
 </paths>
