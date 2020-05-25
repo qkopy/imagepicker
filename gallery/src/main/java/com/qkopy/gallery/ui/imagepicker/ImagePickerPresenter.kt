@@ -13,6 +13,7 @@ import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.camera.CameraModule
 import com.qkopy.gallery.ui.camera.DefaultCameraModule
+import com.qkopy.gallery.ui.camera.OnImageReadyListener
 import com.qkopy.gallery.ui.common.BasePresenter
 import java.io.File
 
@@ -84,7 +85,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
     ) {
         cameraModule.getImage(context, data, object : OnImageReadyListener {
 
-            override fun onImageReady(images: MutableList<Image>?) {
+            override fun onImageReady(images: List<Image>?) {
                 if (!config.isMultipleMode) {
                     view!!.finishPickImages(images)
                 } else {
@@ -97,7 +98,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
         })
     }
 
-    fun onDoneSelectImages(selectedImages: List<Image>) {
+    fun onDoneSelectImages(selectedImages: ArrayList<Image>) {
         if (selectedImages != null && !selectedImages.isEmpty()) {
             var i = 0
             while (i < selectedImages.size) {

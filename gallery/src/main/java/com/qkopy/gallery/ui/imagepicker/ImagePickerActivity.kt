@@ -276,26 +276,34 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             Config.RC_WRITE_EXTERNAL_STORAGE_PERMISSION -> {
                 run {
                     if (PermissionHelper.hasGranted(grantResults)) {
-                        logger.d("Write External permission granted")
+                        if (logger != null) {
+                            logger.d("Write External permission granted")
+                        }
                         getData()
                         return
                     }
-                    logger.e(
-                        "Permission not granted: results len = " + grantResults.size +
-                                " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
-                    )
+                    if (logger != null) {
+                        logger.e(
+                            "Permission not granted: results len = " + grantResults.size +
+                                    " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
+                        )
+                    }
                     finish()
                 }
                 run {
                     if (PermissionHelper.hasGranted(grantResults)) {
-                        logger.d("Camera permission granted")
+                        if (logger != null) {
+                            logger.d("Camera permission granted")
+                        }
                         captureImage()
                         return
                     }
-                    logger.e(
-                        "Permission not granted: results len = " + grantResults.size +
-                                " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
-                    )
+                    if (logger != null) {
+                        logger.e(
+                            "Permission not granted: results len = " + grantResults.size +
+                                    " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
+                        )
+                    }
                     //commented due to error in syntax
                     //break
                 }
@@ -377,11 +385,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         emptyLayout.visibility = View.GONE
     }
 
-    override fun showFetchCompleted(images: List<Image>, folders: List<Folder>) {
+    override fun showFetchCompleted(images: List<Image>?, folders: List<Folder>?) {
         if (config.isFolderMode) {
-            setFolderAdapter(folders)
+            setFolderAdapter(folders!!)
         } else {
-            setImageAdapter(images, config.imageTitle)
+            setImageAdapter(images!!, config.imageTitle!!)
         }
     }
 
@@ -399,7 +407,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         emptyLayout.visibility = View.VISIBLE
     }
 
-    override fun showCapturedImage(images: List<Image>) {
+    override fun showCapturedImage(images: List<Image>?) {
         val shouldSelect = recyclerViewManager.selectImage()
         if (shouldSelect) {
             recyclerViewManager.addSelectedImages(images)
@@ -407,7 +415,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         getDataWithPermission()
     }
 
-    override fun finishPickImages(images: List<Image>) {
+    override fun finishPickImages(images: List<Image>?) {
         val data = Intent()
         data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
         setResult(Activity.RESULT_OK, data)

@@ -23,7 +23,7 @@ class CameraActivty : AppCompatActivity(), CameraView {
         Manifest.permission.CAMERA
     )
     private var snackBar: SnackBarView? = null
-    private var config: Config? = null
+    lateinit var config: Config
     private var presenter: CameraPresenter? = null
     private val logger = LogHelper.instance
     private var isOpeningCamera = false
@@ -35,7 +35,7 @@ class CameraActivty : AppCompatActivity(), CameraView {
             return
         }
         config = intent.getParcelableExtra(Config.EXTRA_CONFIG)
-        if (this.config.isKeepScreenOn) {
+        if (config.isKeepScreenOn) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
         setContentView(R.layout.imagepicker_activity_camera)
@@ -57,7 +57,9 @@ class CameraActivty : AppCompatActivity(), CameraView {
         if (PermissionHelper.hasSelfPermissions(this, permissions)) {
             captureImage()
         } else {
-            logger.w("Camera permission is not granted. Requesting permission")
+            if (logger != null) {
+                logger.w("Camera permission is not granted. Requesting permission")
+            }
             requestCameraPermission()
         }
     }
@@ -72,7 +74,9 @@ class CameraActivty : AppCompatActivity(), CameraView {
     }
 
     private fun requestCameraPermission() {
-        logger.w("Write External permission is not granted. Requesting permission")
+        if (logger != null) {
+            logger.w("Write External permission is not granted. Requesting permission")
+        }
         var hasPermissionDisbled = false
         val wesGranted = PermissionHelper.hasSelfPermission(
             this,
@@ -144,7 +148,9 @@ class CameraActivty : AppCompatActivity(), CameraView {
         when (requestCode) {
             Config.RC_CAMERA_PERMISSION -> {
                 if (PermissionHelper.hasGranted(grantResults)) {
-                    logger.d("Camera permission granted")
+                    if (logger != null) {
+                        logger.d("Camera permission granted")
+                    }
                     captureImage()
                     return
                 }
@@ -170,7 +176,9 @@ class CameraActivty : AppCompatActivity(), CameraView {
                 }
             }
             else -> {
-                logger.d("Got unexpected permission result: $requestCode")
+                if (logger != null) {
+                    logger.d("Got unexpected permission result: $requestCode")
+                }
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults)
                 finish()
             }

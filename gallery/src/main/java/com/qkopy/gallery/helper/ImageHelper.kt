@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
+import com.qkopy.gallery.BuildConfig
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.model.SavePath
 import java.io.File

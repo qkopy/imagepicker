@@ -83,10 +83,10 @@ class RecyclerViewManager(
         imageAdapter!!.setOnImageSelectionListener(imageSelectionListener)
     }
 
-    val selectedImages: List<Image>
+    val selectedImages: ArrayList<Image>
         get() {
             checkAdapterIsInitialized()
-            return imageAdapter!!.getSelectedImages()
+            return imageAdapter!!.getSelectedImages() as ArrayList<Image>
         }
 
     fun addSelectedImages(images: List<Image>?) {
