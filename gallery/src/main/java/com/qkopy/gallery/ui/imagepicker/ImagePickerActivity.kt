@@ -51,7 +51,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     private var handler: Handler? = null
     private var observer: ContentObserver? = null
     private lateinit var presenter: ImagePickerPresenter
-    private val logger = LogHelper.getInstance()
+    private val logger = LogHelper.instance
 
 
     private val imageClickListener = object : OnImageClickListener {
@@ -104,11 +104,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
         val window = window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = config.statusBarColor
+            window.statusBarColor = config.getStatusBarColor()
         }
 
-        progressWheel.barColor = config.progressBarColor
-        findViewById<View>(R.id.container).setBackgroundColor(config.backgroundColor)
+        progressWheel.barColor = config.getProgressBarColor()
+        findViewById<View>(R.id.container).setBackgroundColor(config.getBackgroundColor())
 
 
     }
@@ -156,7 +156,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     private fun invalidateToolbar() {
-        toolbar.setTitle(recyclerViewManager.title)
+        toolbar.setTitle(recyclerViewManager.getTitle()!!)
         toolbar.showDoneButton(recyclerViewManager.isShowDoneButton)
         toolbar.updateSelectedCount(recyclerViewManager.selectedMediaCount())
 
@@ -302,14 +302,20 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             }
             Config.RC_CAMERA_PERMISSION -> {
                 if (PermissionHelper.hasGranted(grantResults)) {
-                    logger.d("Camera permission granted")
+                    if (logger != null) {
+                        logger.d("Camera permission granted")
+                    }
                     captureImage()
                     return
                 }
-                logger.e("Permission not granted: results len = " + grantResults.size + " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)")
+                if (logger != null) {
+                    logger.e("Permission not granted: results len = " + grantResults.size + " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)")
+                }
             }
             else -> {
-                logger.d("Got unexpected permission result: $requestCode")
+                if (logger != null) {
+                    logger.d("Got unexpected permission result: $requestCode")
+                }
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             }
         }

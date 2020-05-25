@@ -11,10 +11,6 @@
                 android:name=".ui.imagepicker.ImagePickerActivity"
                 android:configChanges="orientation|screenSize"
                 android:theme="@style/GalleryTheme"/>
-        <activity
-                android:name=".ui.camera.CameraActivty"
-                android:screenOrientation="portrait"
-                android:theme="@style/GalleryCameraTheme"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"
