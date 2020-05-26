@@ -56,14 +56,14 @@ class ImagePickerToolbar : RelativeLayout {
         setBackgroundColor(config.getToolbarColor())
 
         titleText!!.text = if (config.isFolderMode) config.folderTitle else config.imageTitle
-        titleText!!.setTextColor(config.getToolbarColor())
+       // titleText!!.setTextColor(config.getToolbarColor())
 
         doneText!!.text = config.doneTitle
-        doneText!!.setTextColor(config.getToolbarColor())
+       // doneText!!.setTextColor(config.getToolbarColor())
 
-        backImage!!.setColorFilter(config.getToolbarColor())
+       // backImage!!.setColorFilter(config.getToolbarColor())
 
-        cameraImage!!.setColorFilter(config.getToolbarColor())
+       // cameraImage!!.setColorFilter(config.getToolbarColor())
         cameraImage!!.visibility = if (config.isShowCamera) View.VISIBLE else View.GONE
 
         doneText!!.visibility = View.GONE
