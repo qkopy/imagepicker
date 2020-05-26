@@ -81,6 +81,10 @@ class ImageFileLoader(private val context: Context) {
                             folder.images!!.add(image)
                         }
                     }
+
+
+
+
                 } while (cursor.moveToPrevious())
             }
             cursor.close()
