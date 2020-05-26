@@ -50,6 +50,21 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 }
             }
 
+            override fun onFolderLoaded(images: List<Image>, folders: List<Folder>) {
+                handler.post {
+                    if (isViewAttached){
+                        view!!.showFetching(images,folders)
+                        val isEmpty =
+                            folders.isEmpty()
+                        if (isEmpty) {
+                            view!!.showEmpty()
+                        } else {
+                            view!!.showLoading(false)
+                        }
+                    }
+                }
+            }
+
             override fun onFailed(throwable: Throwable) {
                 handler.post {
                     if (isViewAttached) {

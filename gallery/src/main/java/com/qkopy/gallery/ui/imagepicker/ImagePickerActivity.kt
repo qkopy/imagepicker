@@ -107,7 +107,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             window.statusBarColor = config.getStatusBarColor()
         }
 
-        progressWheel.setBarColor(config.getProgressBarColor()) 
+        progressWheel.setBarColor(config.getProgressBarColor())
         findViewById<View>(R.id.container).setBackgroundColor(config.getBackgroundColor())
 
 
@@ -152,6 +152,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
     private fun setFolderAdapter(folders: List<Folder>) {
         recyclerViewManager.setFolderAdapter(folders)
+        invalidateToolbar()
+    }
+
+    private fun addToFolderAdapter(folder: Folder) {
+        recyclerViewManager.addToFolderAdapter(folder)
         invalidateToolbar()
     }
 
@@ -391,11 +396,25 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         emptyLayout.visibility = View.GONE
     }
 
-    override fun showFetchCompleted(images: List<Image>?, folders: List<Folder>?) {
+    override fun showFetchCompleted(images: List<Image>, folders: List<Folder>) {
         if (config.isFolderMode) {
-            setFolderAdapter(folders!!)
+            //setFolderAdapter(folders!!)
         } else {
             setImageAdapter(images!!, config.imageTitle!!)
+        }
+    }
+
+    override fun showFetching(images: List<Image>, folders: List<Folder>) {
+        if (config.isFolderMode){
+            if (folders?.size?:0==1)
+                setFolderAdapter(folders!!)
+            else if (folders?.size?:0>1)
+                addToFolderAdapter(folders!!.last())
+        }else{
+            if (images?.size?:0==1)
+                setImageAdapter(images!!,config.imageTitle!!)
+            //else if (images?.size?:0>1)
+                //addToFolderAdapter(images!!.last())
         }
     }
 

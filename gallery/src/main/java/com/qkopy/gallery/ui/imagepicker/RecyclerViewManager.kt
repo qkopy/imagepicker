@@ -143,6 +143,9 @@ class RecyclerViewManager(
             recyclerView.layoutManager!!.onRestoreInstanceState(foldersState)
         }
     }
+    fun addToFolderAdapter(folder: Folder) {
+        folderAdapter!!.addData(folder)
+    }
 
     fun getTitle(): String? {
         return if (isShowingFolder) {

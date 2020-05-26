@@ -57,6 +57,14 @@ class FolderPickerAdapter(
         notifyDataSetChanged()
     }
 
+    fun addData(folder: Folder)
+    {
+        if (folder!=null){
+            this.folders.add(folder)
+            notifyItemInserted(this.folders.size-1)
+        }
+    }
+
 
 
      class FolderViewHolder(itemView: View) :

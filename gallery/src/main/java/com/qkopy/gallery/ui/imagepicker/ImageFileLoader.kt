@@ -78,6 +78,7 @@ class ImageFileLoader(private val context: Context) {
                             if (folder == null) {
                                 folder = Folder(bucket)
                                 folderMap[bucket] = folder
+                                listener.onFolderLoaded(images,ArrayList(folderMap.values))
                             }
                             folder.images!!.add(image)
                         }
