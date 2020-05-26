@@ -40,7 +40,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                             folders
                         )
                         val isEmpty =
-                            folders?.isEmpty() ?: images.isEmpty()
+                            folders.isEmpty() and  images.isEmpty()
                         if (isEmpty) {
                             view!!.showEmpty()
                         } else {

@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
 
         ImagePicker.with(this)
-            .setFolderMode(true)
+            .setFolderMode(false)
             .setCameraOnly(false)
             .setFolderTitle("Album")
             .setShowCamera(true)

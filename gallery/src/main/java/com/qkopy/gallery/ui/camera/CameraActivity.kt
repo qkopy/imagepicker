@@ -5,17 +5,20 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.qkopy.gallery.R
 import com.qkopy.gallery.helper.CameraHelper
 import com.qkopy.gallery.helper.LogHelper
 import com.qkopy.gallery.helper.PermissionHelper
+import com.qkopy.gallery.helper.PermissionHelper.openAppSettings
 import com.qkopy.gallery.helper.PreferenceHelper
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.widget.SnackBarView
 import java.util.*
+
 
 class CameraActivty : AppCompatActivity(), CameraView {
     private val permissions = arrayOf(
@@ -136,8 +139,12 @@ class CameraActivty : AppCompatActivity(), CameraView {
             )
         } else {
             snackBar!!.show(
-                R.string.msg_no_write_external_storage_camera_permission
-            ) { PermissionHelper.openAppSettings(this@CameraActivty) }
+                R.string.msg_no_write_external_storage_camera_permission,
+                object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        PermissionHelper.openAppSettings(this@CameraActivty)
+                    }
+                })
         }
     }
 
@@ -169,8 +176,12 @@ class CameraActivty : AppCompatActivity(), CameraView {
                 }
                 if (shouldShowSnackBar) {
                     snackBar!!.show(
-                        R.string.msg_no_write_external_storage_camera_permission
-                    ) { PermissionHelper.openAppSettings(this@CameraActivty) }
+                        R.string.msg_no_write_external_storage_camera_permission,
+                        object : View.OnClickListener {
+                            override fun onClick(view: View?) {
+                                openAppSettings(this@CameraActivty)
+                            }
+                        })
                 } else {
                     finish()
                 }

@@ -107,7 +107,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             window.statusBarColor = config.getStatusBarColor()
         }
 
-        progressWheel.barColor = config.getProgressBarColor()
+        progressWheel.setBarColor(config.getProgressBarColor()) 
         findViewById<View>(R.id.container).setBackgroundColor(config.getBackgroundColor())
 
 
@@ -197,11 +197,14 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackBar!!.show(R.string.msg_no_write_external_storage_permission) {
-                        PermissionHelper.openAppSettings(
-                            this@ImagePickerActivity
-                        )
-                    }
+                    snackBar!!.show(R.string.msg_no_write_external_storage_permission,
+                        object : View.OnClickListener {
+                            override fun onClick(v: View?) {
+                                PermissionHelper.openAppSettings(
+                                    this@ImagePickerActivity
+                                )
+                            }
+                        })
                 }
 
                 override fun onPermissionGranted() {
@@ -241,11 +244,14 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackBar.show(R.string.msg_no_camera_permission) {
-                        PermissionHelper.openAppSettings(
-                            this@ImagePickerActivity
-                        )
-                    }
+                    snackBar.show(R.string.msg_no_camera_permission,
+                        object : View.OnClickListener {
+                            override fun onClick(v: View?) {
+                                PermissionHelper.openAppSettings(
+                                    this@ImagePickerActivity
+                                )
+                            }
+                        })
                 }
 
                 override fun onPermissionGranted() {
