@@ -81,9 +81,10 @@ class ImageFileLoader(private val context: Context) {
                                 listener.onFolderAdded(images,ArrayList(folderMap.values))
                             }
                             folder.images!!.add(image)
-                            listener.onFolderUpdated(images,folder)
+                            if (isFolderMode) listener.onFolderUpdated(folder)
 
                         }
+                        listener.onImageAdded(images)
                     }
 
 

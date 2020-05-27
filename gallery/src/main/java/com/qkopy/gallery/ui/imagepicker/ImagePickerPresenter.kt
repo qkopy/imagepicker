@@ -65,10 +65,25 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 }
             }
 
-            override fun onFolderUpdated(images: List<Image>, folder: Folder) {
+            override fun onImageAdded(images:List<Image>) {
                 handler.post {
                     if (isViewAttached){
-                        view!!.showUpdate(images.last(),folder)
+                        view!!.showUpdateImage(images)
+                        val isEmpty =
+                            images.isEmpty()
+                        if (isEmpty) {
+                            view!!.showEmpty()
+                        } else {
+                            view!!.showLoading(false)
+                        }
+                    }
+                }
+            }
+
+            override fun onFolderUpdated(folder: Folder) {
+                handler.post {
+                    if (isViewAttached){
+                        view!!.showUpdateFolder(folder)
                     }
                 }
             }

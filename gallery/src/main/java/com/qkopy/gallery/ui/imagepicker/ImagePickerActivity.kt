@@ -164,6 +164,10 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         recyclerViewManager.updateFolderAdapter(folder)
     }
 
+    private fun updateImagesAdapter(images: Image){
+        recyclerViewManager.addToImageAdapter(images)
+    }
+
     private fun invalidateToolbar() {
         toolbar.setTitle(recyclerViewManager.getTitle()!!)
         toolbar.showDoneButton(recyclerViewManager.isShowDoneButton)
@@ -404,26 +408,31 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         if (config.isFolderMode) {
             //setFolderAdapter(folders!!)
         } else {
-            setImageAdapter(images!!, config.imageTitle!!)
+            //setImageAdapter(images!!, config.imageTitle!!)
         }
     }
 
-    override fun showFetching(images: List<Image>, folders: List<Folder>) {
+    override fun showFetching(images: List<Image>?, folders: List<Folder>?) {
         if (config.isFolderMode){
             if (folders?.size?:0==1)
                 setFolderAdapter(folders!!)
             else if (folders?.size?:0>1)
                 addToFolderAdapter(folders!!.last())
-        }else{
-            if (images?.size?:0==1)
-                setImageAdapter(images!!,config.imageTitle!!)
-            //else if (images?.size?:0>1)
-                //addToFolderAdapter(images!!.last())
         }
     }
 
-    override fun showUpdate(image: Image, folder: Folder) {
-        updateFolderAdapter(folder)
+    override fun showUpdateFolder(folder: Folder) {
+        if (config.isFolderMode)
+            updateFolderAdapter(folder)
+    }
+
+    override fun showUpdateImage(images: List<Image>?) {
+        if (!config.isFolderMode)
+            {
+                if (images?.size?:0==1)
+                setImageAdapter(images!!,config.imageTitle!!)
+            else if (images?.size?:0>1)
+                updateImagesAdapter(images!!.last())}
     }
 
     override fun showError(throwable: Throwable?) {

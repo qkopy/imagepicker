@@ -143,6 +143,9 @@ class RecyclerViewManager(
             recyclerView.layoutManager!!.onRestoreInstanceState(foldersState)
         }
     }
+    fun addToImageAdapter(image: Image){
+        imageAdapter!!.addImage(image)
+    }
     fun addToFolderAdapter(folder: Folder) {
         folderAdapter!!.addData(folder)
     }

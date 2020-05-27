@@ -118,6 +118,15 @@ class ImagePickerAdapter(
         notifyDataSetChanged()
     }
 
+    fun addImage(image: Image)
+    {
+        if (!this.images.contains(image)){
+            this.images.add(image)
+            notifyItemInserted(this.images.lastIndex)
+        }
+
+    }
+
     fun addSelected(images: List<Image>?) {
         selectedImages.addAll(images!!)
         notifySelectionChanged()
