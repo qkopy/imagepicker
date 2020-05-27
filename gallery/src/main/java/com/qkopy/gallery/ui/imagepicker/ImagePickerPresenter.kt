@@ -50,7 +50,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 }
             }
 
-            override fun onFolderLoaded(images: List<Image>, folders: List<Folder>) {
+            override fun onFolderAdded(images: List<Image>, folders: List<Folder>) {
                 handler.post {
                     if (isViewAttached){
                         view!!.showFetching(images,folders)
@@ -61,6 +61,14 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                         } else {
                             view!!.showLoading(false)
                         }
+                    }
+                }
+            }
+
+            override fun onFolderUpdated(images: List<Image>, folder: Folder) {
+                handler.post {
+                    if (isViewAttached){
+                        view!!.showUpdate(images.last(),folder)
                     }
                 }
             }

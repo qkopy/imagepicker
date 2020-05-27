@@ -160,6 +160,10 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         invalidateToolbar()
     }
 
+    private fun updateFolderAdapter(folder: Folder){
+        recyclerViewManager.updateFolderAdapter(folder)
+    }
+
     private fun invalidateToolbar() {
         toolbar.setTitle(recyclerViewManager.getTitle()!!)
         toolbar.showDoneButton(recyclerViewManager.isShowDoneButton)
@@ -416,6 +420,10 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             //else if (images?.size?:0>1)
                 //addToFolderAdapter(images!!.last())
         }
+    }
+
+    override fun showUpdate(image: Image, folder: Folder) {
+        updateFolderAdapter(folder)
     }
 
     override fun showError(throwable: Throwable?) {

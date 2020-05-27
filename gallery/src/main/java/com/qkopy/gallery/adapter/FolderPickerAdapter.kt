@@ -57,6 +57,12 @@ class FolderPickerAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateData(folder: Folder){
+        val index = folders.indexOf(folders.find { it.folderName.equals(folder.folderName) })
+        folders.set(index,folder)
+        notifyItemChanged(index)
+    }
+
     fun addData(folder: Folder)
     {
         if (folder!=null){

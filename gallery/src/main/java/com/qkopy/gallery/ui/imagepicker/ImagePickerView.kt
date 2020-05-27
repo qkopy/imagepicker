@@ -16,4 +16,5 @@ interface ImagePickerView : MvpView {
     fun showCapturedImage(images: List<Image>?)
     fun finishPickImages(images: List<Image>?)
     fun showFetching(images: List<Image>,folders: List<Folder>)
+    fun showUpdate(image: Image,folder: Folder)
 }
