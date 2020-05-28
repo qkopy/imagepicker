@@ -6,6 +6,30 @@ android library for imagepicker
 
 ### Adding Library to Project
 
+Step 1. Add the JitPack repository to your build file
+
+Add it in your root build.gradle at the end of repositories:
+
+```
+allprojects {
+   repositories {
+      ...
+      maven { url 'https://jitpack.io' }
+   }
+}
+```
+Step 2. Add the dependency
+
+VERSION: [![](https://jitpack.io/v/qkopy/imagepicker.svg)](https://jitpack.io/#qkopy/imagepicker)
+
+
+```
+dependencies {
+     implementation 'com.github.qkopy:imagepicker:v0.0.7'
+}
+```
+
+
 ### Implementation
 
 ```
