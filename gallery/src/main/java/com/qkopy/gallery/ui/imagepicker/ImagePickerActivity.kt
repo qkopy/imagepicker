@@ -51,7 +51,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     private var handler: Handler? = null
     private var observer: ContentObserver? = null
     private lateinit var presenter: ImagePickerPresenter
-    private val logger = LogHelper.getInstance()
+    private val logger = LogHelper.instance
 
 
     private val imageClickListener = object : OnImageClickListener {
@@ -104,11 +104,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
         val window = window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = config.statusBarColor
+            window.statusBarColor = config.getStatusBarColor()
         }
 
-        progressWheel.barColor = config.progressBarColor
-        findViewById<View>(R.id.container).setBackgroundColor(config.backgroundColor)
+        progressWheel.setBarColor(config.getProgressBarColor())
+        findViewById<View>(R.id.container).setBackgroundColor(config.getBackgroundColor())
 
 
     }
@@ -155,8 +155,21 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         invalidateToolbar()
     }
 
+    private fun addToFolderAdapter(folder: Folder) {
+        recyclerViewManager.addToFolderAdapter(folder)
+        invalidateToolbar()
+    }
+
+    private fun updateFolderAdapter(folder: Folder){
+        recyclerViewManager.updateFolderAdapter(folder)
+    }
+
+    private fun updateImagesAdapter(images: Image){
+        recyclerViewManager.addToImageAdapter(images)
+    }
+
     private fun invalidateToolbar() {
-        toolbar.setTitle(recyclerViewManager.title)
+        toolbar.setTitle(recyclerViewManager.getTitle()!!)
         toolbar.showDoneButton(recyclerViewManager.isShowDoneButton)
         toolbar.updateSelectedCount(recyclerViewManager.selectedMediaCount())
 
@@ -197,11 +210,14 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackBar!!.show(R.string.msg_no_write_external_storage_permission) {
-                        PermissionHelper.openAppSettings(
-                            this@ImagePickerActivity
-                        )
-                    }
+                    snackBar!!.show(R.string.msg_no_write_external_storage_permission,
+                        object : View.OnClickListener {
+                            override fun onClick(v: View?) {
+                                PermissionHelper.openAppSettings(
+                                    this@ImagePickerActivity
+                                )
+                            }
+                        })
                 }
 
                 override fun onPermissionGranted() {
@@ -241,11 +257,14 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackBar.show(R.string.msg_no_camera_permission) {
-                        PermissionHelper.openAppSettings(
-                            this@ImagePickerActivity
-                        )
-                    }
+                    snackBar.show(R.string.msg_no_camera_permission,
+                        object : View.OnClickListener {
+                            override fun onClick(v: View?) {
+                                PermissionHelper.openAppSettings(
+                                    this@ImagePickerActivity
+                                )
+                            }
+                        })
                 }
 
                 override fun onPermissionGranted() {
@@ -276,40 +295,54 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             Config.RC_WRITE_EXTERNAL_STORAGE_PERMISSION -> {
                 run {
                     if (PermissionHelper.hasGranted(grantResults)) {
-                        logger.d("Write External permission granted")
+                        if (logger != null) {
+                            logger.d("Write External permission granted")
+                        }
                         getData()
                         return
                     }
-                    logger.e(
-                        "Permission not granted: results len = " + grantResults.size +
-                                " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
-                    )
+                    if (logger != null) {
+                        logger.e(
+                            "Permission not granted: results len = " + grantResults.size +
+                                    " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
+                        )
+                    }
                     finish()
                 }
                 run {
                     if (PermissionHelper.hasGranted(grantResults)) {
-                        logger.d("Camera permission granted")
+                        if (logger != null) {
+                            logger.d("Camera permission granted")
+                        }
                         captureImage()
                         return
                     }
-                    logger.e(
-                        "Permission not granted: results len = " + grantResults.size +
-                                " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
-                    )
+                    if (logger != null) {
+                        logger.e(
+                            "Permission not granted: results len = " + grantResults.size +
+                                    " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
+                        )
+                    }
                     //commented due to error in syntax
                     //break
                 }
             }
             Config.RC_CAMERA_PERMISSION -> {
                 if (PermissionHelper.hasGranted(grantResults)) {
-                    logger.d("Camera permission granted")
+                    if (logger != null) {
+                        logger.d("Camera permission granted")
+                    }
                     captureImage()
                     return
                 }
-                logger.e("Permission not granted: results len = " + grantResults.size + " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)")
+                if (logger != null) {
+                    logger.e("Permission not granted: results len = " + grantResults.size + " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)")
+                }
             }
             else -> {
-                logger.d("Got unexpected permission result: $requestCode")
+                if (logger != null) {
+                    logger.d("Got unexpected permission result: $requestCode")
+                }
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             }
         }
@@ -373,10 +406,33 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
     override fun showFetchCompleted(images: List<Image>, folders: List<Folder>) {
         if (config.isFolderMode) {
-            setFolderAdapter(folders)
+            //setFolderAdapter(folders!!)
         } else {
-            setImageAdapter(images, config.imageTitle)
+            //setImageAdapter(images!!, config.imageTitle!!)
         }
+    }
+
+    override fun showFetching(images: List<Image>?, folders: List<Folder>?) {
+        if (config.isFolderMode){
+            if (folders?.size?:0==1)
+                setFolderAdapter(folders!!)
+            else if (folders?.size?:0>1)
+                addToFolderAdapter(folders!!.last())
+        }
+    }
+
+    override fun showUpdateFolder(folder: Folder) {
+        if (config.isFolderMode)
+            updateFolderAdapter(folder)
+    }
+
+    override fun showUpdateImage(images: List<Image>?) {
+        if (!config.isFolderMode)
+            {
+                if (images?.size?:0==1)
+                setImageAdapter(images!!,config.imageTitle!!)
+            else if (images?.size?:0>1)
+                updateImagesAdapter(images!!.last())}
     }
 
     override fun showError(throwable: Throwable?) {
@@ -393,7 +449,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         emptyLayout.visibility = View.VISIBLE
     }
 
-    override fun showCapturedImage(images: List<Image>) {
+    override fun showCapturedImage(images: List<Image>?) {
         val shouldSelect = recyclerViewManager.selectImage()
         if (shouldSelect) {
             recyclerViewManager.addSelectedImages(images)
@@ -401,7 +457,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         getDataWithPermission()
     }
 
-    override fun finishPickImages(images: List<Image>) {
+    override fun finishPickImages(images: List<Image>?) {
         val data = Intent()
         data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
         setResult(Activity.RESULT_OK, data)
