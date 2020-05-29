@@ -17,6 +17,7 @@ import com.qkopy.gallery.listener.OnImageClickListener
 import com.qkopy.gallery.listener.OnImageSelectionListener
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter
+import kotlinx.android.synthetic.main.imagepicker_item_image.view.*
 import java.util.*
 
 
@@ -179,9 +180,9 @@ class ImagePickerAdapter(
 
         init {
             container = itemView as FrameLayout
-            image = itemView.findViewById(R.id.image_thumbnail)
-            alphaView = itemView.findViewById(R.id.view_alpha)
-            gifIndicator = itemView.findViewById(R.id.gif_indicator)
+            image = itemView.image_thumbnail
+            alphaView = itemView.view_alpha
+            gifIndicator = itemView.gif_indicator
         }
     }
 

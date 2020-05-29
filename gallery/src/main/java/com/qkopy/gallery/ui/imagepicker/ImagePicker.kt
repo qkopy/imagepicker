@@ -188,32 +188,19 @@ class ImagePicker(builder: Builder) {
         init {
             config = Config()
             val resources = context!!.resources
-            //config.setCameraOnly(false)
             config.isCameraOnly = false
-            //config.setMultipleMode(true)
             config.isMultipleMode = true
-            //config.setFolderMode(true)
             config.isFolderMode = true
-            //config.setShowCamera(config.isShowCamera())
             config.isShowCamera = config.isShowCamera
-            //config.setMaxSize(Config.MAX_SIZE)
             config.maxSize = Config.MAX_SIZE
             config.doneTitle = resources.getString(R.string.action_done)
-            //config.setDoneTitle(resources.getString(R.string.action_done))
             config.folderTitle = resources.getString(R.string.title_folder)
-            //config.setFolderTitle(resources.getString(R.string.title_folder))
             config.imageTitle = resources.getString(R.string.title_image)
-            //config.setImageTitle(resources.getString(R.string.title_image))
             config.limitMessage = resources.getString(R.string.msg_limit_images)
-            //config.setLimitMessage(resources.getString(R.string.msg_limit_images))
             config.savePath = SavePath.DEFAULT
-            //config.setSavePath(SavePath.DEFAULT)
             config.isAlwaysShowDoneButton = false
-            //config.setAlwaysShowDoneButton(false)
             config.isKeepScreenOn = false
-            //config.setKeepScreenOn(false)
             config.selectedImages = ArrayList<Image>()
-            //config.setSelectedImages(ArrayList<Image>())
         }
     }
 

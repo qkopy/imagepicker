@@ -323,8 +323,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                                     " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
                         )
                     }
-                    //commented due to error in syntax
-                    //break
+
                 }
             }
             Config.RC_CAMERA_PERMISSION -> {
@@ -405,13 +404,15 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     override fun showFetchCompleted(images: List<Image>, folders: List<Folder>) {
-        if (config.isFolderMode) {
-            //setFolderAdapter(folders!!)
-        } else {
-            //setImageAdapter(images!!, config.imageTitle!!)
-        }
+//        if (config.isFolderMode) {
+//            //setFolderAdapter(folders!!)
+//        } else {
+//            //setImageAdapter(images!!, config.imageTitle!!)
+//        }
+        //Commented code is the old way of showing data in the UI (Showing after loading all the images)
     }
 
+    //Here set data to adapter and add data to adapter when an image is found
     override fun showFetching(images: List<Image>?, folders: List<Folder>?) {
         if (config.isFolderMode){
             if (folders?.size?:0==1)
@@ -421,11 +422,13 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         }
     }
 
+    //Here Update the images in a folder when an image is found
     override fun showUpdateFolder(folder: Folder) {
         if (config.isFolderMode)
             updateFolderAdapter(folder)
     }
 
+    //Here update images on images found in Images list
     override fun showUpdateImage(images: List<Image>?) {
         if (!config.isFolderMode)
             {

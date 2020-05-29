@@ -14,6 +14,7 @@ import com.qkopy.gallery.R
 import com.qkopy.gallery.listener.OnFolderClickListener
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter
+import kotlinx.android.synthetic.main.imagepicker_item_folder.view.*
 import java.util.*
 
 class FolderPickerAdapter(
@@ -65,10 +66,10 @@ class FolderPickerAdapter(
 
     fun addData(folder: Folder)
     {
-        if (folder!=null){
+
             this.folders.add(folder)
             notifyItemInserted(this.folders.size-1)
-        }
+
     }
 
 
@@ -80,9 +81,9 @@ class FolderPickerAdapter(
          val count: TextView
 
         init {
-            image = itemView.findViewById(R.id.image_folder_thumbnail)
-            name = itemView.findViewById(R.id.text_folder_name)
-            count = itemView.findViewById(R.id.text_photo_count)
+            image = itemView.image_folder_thumbnail
+            name = itemView.text_folder_name
+            count = itemView.text_photo_count
         }
     }
 

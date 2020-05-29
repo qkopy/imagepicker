@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import com.qkopy.gallery.R
 import com.qkopy.gallery.model.Config
+import kotlinx.android.synthetic.main.imagepicker_toolbar.view.*
 
 
 class ImagePickerToolbar : RelativeLayout {
@@ -43,11 +44,11 @@ class ImagePickerToolbar : RelativeLayout {
             return
         }
 
-        titleText = findViewById(R.id.text_toolbar_title)
-        selectedText = findViewById(R.id.text_toolbar_count)
-        doneText = findViewById(R.id.text_toolbar_done)
-        backImage = findViewById(R.id.image_toolbar_back)
-        cameraImage = findViewById(R.id.image_toolbar_camera)
+        titleText = text_toolbar_title
+        selectedText = text_toolbar_count
+        doneText = text_toolbar_done
+        backImage = image_toolbar_back
+        cameraImage = image_toolbar_camera
     }
 
     fun config(config: Config) {
@@ -56,14 +57,14 @@ class ImagePickerToolbar : RelativeLayout {
         setBackgroundColor(config.getToolbarColor())
 
         titleText!!.text = if (config.isFolderMode) config.folderTitle else config.imageTitle
-       // titleText!!.setTextColor(config.getToolbarColor())
+        titleText!!.setTextColor(config.getToolbarTextColor())
 
         doneText!!.text = config.doneTitle
-       // doneText!!.setTextColor(config.getToolbarColor())
+        doneText!!.setTextColor(config.getToolbarTextColor())
 
-       // backImage!!.setColorFilter(config.getToolbarColor())
+       backImage!!.setColorFilter(config.getToolbarIconColor())
 
-       // cameraImage!!.setColorFilter(config.getToolbarColor())
+        cameraImage!!.setColorFilter(config.getToolbarIconColor())
         cameraImage!!.visibility = if (config.isShowCamera) View.VISIBLE else View.GONE
 
         doneText!!.visibility = View.GONE
