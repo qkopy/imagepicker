@@ -403,15 +403,6 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         emptyLayout.visibility = View.GONE
     }
 
-    override fun showFetchCompleted(images: List<Image>, folders: List<Folder>) {
-//        if (config.isFolderMode) {
-//            //setFolderAdapter(folders!!)
-//        } else {
-//            //setImageAdapter(images!!, config.imageTitle!!)
-//        }
-        //Commented code is the old way of showing data in the UI (Showing after loading all the images)
-    }
-
     //Here set data to adapter and add data to adapter when an image is found
     override fun showFetching(images: List<Image>?, folders: List<Folder>?) {
         if (config.isFolderMode){

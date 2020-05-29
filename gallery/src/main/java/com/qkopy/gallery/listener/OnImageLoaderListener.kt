@@ -10,7 +10,6 @@ import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
 
 interface OnImageLoaderListener {
-    fun onImageLoaded(images: List<Image>, folders: List<Folder>)
 
     fun onFolderAdded(images: List<Image>,folders: List<Folder>)
 

@@ -94,12 +94,6 @@ class ImageFileLoader(private val context: Context) {
             }
             cursor.close()
 
-            /* Convert HashMap to ArrayList if not null */
-            var folders: List<Folder>? = ArrayList()
-            if (folderMap != null) {
-                folders = ArrayList(folderMap.values)
-            }
-            listener.onImageLoaded(images, folders!!)
         }
 
     }

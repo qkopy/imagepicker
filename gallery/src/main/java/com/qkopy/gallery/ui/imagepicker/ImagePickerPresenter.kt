@@ -29,26 +29,6 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
         if (!isViewAttached) return
         view!!.showLoading(true)
         imageLoader.loadDeviceImages(isFolderMode, object : OnImageLoaderListener {
-            override fun onImageLoaded(
-                images: List<Image>,
-                folders: List<Folder>
-            ) {
-                handler.post {
-                    if (isViewAttached) {
-                        view!!.showFetchCompleted(
-                            images,
-                            folders
-                        )
-                        val isEmpty =
-                            folders.isEmpty() and  images.isEmpty()
-                        if (isEmpty) {
-                            view!!.showEmpty()
-                        } else {
-                            view!!.showLoading(false)
-                        }
-                    }
-                }
-            }
 
             override fun onFolderAdded(images: List<Image>, folders: List<Folder>) {
                 handler.post {
