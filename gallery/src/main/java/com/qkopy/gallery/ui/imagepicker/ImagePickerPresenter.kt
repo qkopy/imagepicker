@@ -45,17 +45,11 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 }
             }
 
-            override fun onImageAdded(images: List<Image>) {
+            override fun onImageAdded(image:Image) {
                 handler.post {
                     if (isViewAttached) {
-                        view!!.showUpdateImage(images)
-                        val isEmpty =
-                            images.isEmpty()
-                        if (isEmpty) {
-                            view!!.showEmpty()
-                        } else {
+                        view!!.showUpdateImage(image)
                             view!!.showLoading(false)
-                        }
                     }
                 }
             }
@@ -72,6 +66,14 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 handler.post {
                     if (isViewAttached) {
                         view!!.showError(throwable)
+                    }
+                }
+            }
+
+            override fun onEmpty() {
+                handler.post{
+                    if (isViewAttached){
+                        view!!.showEmpty()
                     }
                 }
             }

@@ -15,7 +15,9 @@ interface OnImageLoaderListener {
 
     fun onFolderUpdated(folders: Folder)
 
-    fun onImageAdded(images: List<Image>)
+    fun onImageAdded(image: Image)
 
     fun onFailed(throwable: Throwable)
+
+    fun onEmpty()
 }

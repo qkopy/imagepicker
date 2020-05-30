@@ -83,8 +83,14 @@ class ImageFileLoader(private val context: Context) {
                             folder.images!!.add(image)
                             if (isFolderMode) listener.onFolderUpdated(folder)
 
+                        }else{
+                            if (images.size==1)
+                                listener.onFolderAdded(images,ArrayList<Folder>())
+                            else
+                                listener.onImageAdded(image)
                         }
-                        listener.onImageAdded(images)
+
+
                     }
 
 
@@ -92,6 +98,9 @@ class ImageFileLoader(private val context: Context) {
             }
             cursor.close()
 
+            if((folderMap!=null && folderMap.values.isEmpty()) || images.isEmpty()){
+                listener.onEmpty()
+            }
         }
 
     }
