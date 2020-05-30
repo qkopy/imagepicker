@@ -227,7 +227,6 @@ class CameraActivty : AppCompatActivity(), CameraView {
     }
 
 
-
     override fun finishPickImages(images: List<Image>?) {
         val data = Intent()
         data.putParcelableArrayListExtra(

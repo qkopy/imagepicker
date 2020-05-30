@@ -39,7 +39,6 @@ class ImagePickerAdapter(
     }
 
 
-
     override fun onBindViewHolder(viewHolder: ImageViewHolder, position: Int) {
         val image: Image = images[position]
         val isSelected = isSelected(image)
@@ -119,9 +118,8 @@ class ImagePickerAdapter(
         notifyDataSetChanged()
     }
 
-    fun addImage(image: Image)
-    {
-        if (!this.images.contains(image)){
+    fun addImage(image: Image) {
+        if (!this.images.contains(image)) {
             this.images.add(image)
             notifyItemInserted(this.images.lastIndex)
         }
@@ -170,13 +168,12 @@ class ImagePickerAdapter(
     }
 
 
-
-     class ImageViewHolder(itemView: View) :
+    class ImageViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-         val container: FrameLayout
-         val image: ImageView
-         val alphaView: View
-         val gifIndicator: View
+        val container: FrameLayout
+        val image: ImageView
+        val alphaView: View
+        val gifIndicator: View
 
         init {
             container = itemView as FrameLayout

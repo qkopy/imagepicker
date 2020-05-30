@@ -34,7 +34,11 @@ class ImagePickerToolbar : RelativeLayout {
         init(context)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context)
     }
 
@@ -62,7 +66,7 @@ class ImagePickerToolbar : RelativeLayout {
         doneText!!.text = config.doneTitle
         doneText!!.setTextColor(config.getToolbarTextColor())
 
-       backImage!!.setColorFilter(config.getToolbarIconColor())
+        backImage!!.setColorFilter(config.getToolbarIconColor())
 
         cameraImage!!.setColorFilter(config.getToolbarIconColor())
         cameraImage!!.visibility = if (config.isShowCamera) View.VISIBLE else View.GONE

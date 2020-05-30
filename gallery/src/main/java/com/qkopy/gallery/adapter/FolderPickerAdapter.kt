@@ -30,7 +30,6 @@ class FolderPickerAdapter(
     }
 
 
-
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
         val folder = folders[position]
         Glide.with(context)
@@ -58,27 +57,25 @@ class FolderPickerAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateData(folder: Folder){
+    fun updateData(folder: Folder) {
         val index = folders.indexOf(folders.find { it.folderName.equals(folder.folderName) })
-        folders.set(index,folder)
+        folders.set(index, folder)
         notifyItemChanged(index)
     }
 
-    fun addData(folder: Folder)
-    {
+    fun addData(folder: Folder) {
 
-            this.folders.add(folder)
-            notifyItemInserted(this.folders.size-1)
+        this.folders.add(folder)
+        notifyItemInserted(this.folders.size - 1)
 
     }
 
 
-
-     class FolderViewHolder(itemView: View) :
+    class FolderViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-         val image: ImageView
-         val name: TextView
-         val count: TextView
+        val image: ImageView
+        val name: TextView
+        val count: TextView
 
         init {
             image = itemView.image_folder_thumbnail

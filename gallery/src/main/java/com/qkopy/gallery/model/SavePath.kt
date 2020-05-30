@@ -30,6 +30,7 @@ class SavePath : Parcelable {
 
     companion object {
         val DEFAULT = SavePath(BuildConfig.IMAGE_PATH, false)
+
         @JvmField
         val CREATOR: Parcelable.Creator<SavePath> = object : Parcelable.Creator<SavePath> {
             override fun createFromParcel(source: Parcel): SavePath? {

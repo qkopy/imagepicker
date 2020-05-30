@@ -32,8 +32,8 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
 
             override fun onFolderAdded(images: List<Image>, folders: List<Folder>) {
                 handler.post {
-                    if (isViewAttached){
-                        view!!.showFetching(images,folders)
+                    if (isViewAttached) {
+                        view!!.showFetching(images, folders)
                         val isEmpty =
                             folders.isEmpty()
                         if (isEmpty) {
@@ -45,9 +45,9 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 }
             }
 
-            override fun onImageAdded(images:List<Image>) {
+            override fun onImageAdded(images: List<Image>) {
                 handler.post {
-                    if (isViewAttached){
+                    if (isViewAttached) {
                         view!!.showUpdateImage(images)
                         val isEmpty =
                             images.isEmpty()
@@ -62,7 +62,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
 
             override fun onFolderUpdated(folder: Folder) {
                 handler.post {
-                    if (isViewAttached){
+                    if (isViewAttached) {
                         view!!.showUpdateFolder(folder)
                     }
                 }
@@ -84,7 +84,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
         requestCode: Int
     ) {
         val context = activity.applicationContext
-        val intent = cameraModule.getCameraIntent(activity,config)
+        val intent = cameraModule.getCameraIntent(activity, config)
         if (intent == null) {
             Toast.makeText(
                 context,

@@ -9,8 +9,6 @@ import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.model.SavePath
 import com.qkopy.gallery.ui.camera.CameraActivty
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ImagePicker(builder: Builder) {
     protected var config: Config
@@ -75,8 +73,8 @@ class ImagePicker(builder: Builder) {
     }
 
     abstract class Builder : BaseBuilder {
-        constructor(activity: Activity?) : super(activity) {}
-        constructor(fragment: Fragment) : super(fragment.context) {}
+        constructor(activity: Activity?) : super(activity)
+        constructor(fragment: Fragment) : super(fragment.context)
 
         fun setToolbarColor(toolbarColor: String?): Builder {
             config.setToolbarColor(toolbarColor)
@@ -159,7 +157,7 @@ class ImagePicker(builder: Builder) {
         }
 
         fun setAlwaysShowDoneButton(isAlwaysShowDoneButton: Boolean): Builder {
-            config.isAlwaysShowDoneButton= isAlwaysShowDoneButton
+            config.isAlwaysShowDoneButton = isAlwaysShowDoneButton
             return this
         }
 

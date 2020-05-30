@@ -12,21 +12,6 @@
 
     <style name="GalleryTheme" parent="GalleryBaseTheme"/>
 
-    <style name="GalleryCameraTheme" parent="GalleryBaseTheme">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
-    <style name="CameraTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:screenOrientation">portrait</item>
-        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
-    </style>
-
     <style name="GalleryToolbarTitleText"
            parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
         <item name="android:layout_width">wrap_content</item>
@@ -40,11 +25,6 @@
     </style>
 
     <style name="GalleryTextSmall" parent="TextAppearance.AppCompat.Small">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="GalleryTextMedium" parent="TextAppearance.AppCompat.Medium">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
