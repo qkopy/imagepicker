@@ -19,15 +19,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         button.setOnClickListener {
-            start()
+            startFoldersList()
+        }
+        btn.setOnClickListener {
+            startImagesList()
         }
     }
 
-    private fun start() {
+    private fun startFoldersList() {
 
 
         ImagePicker.with(this)
             .setFolderMode(true)
+            .setCameraOnly(false)
+            .setFolderTitle("Album")
+            .setShowCamera(true)
+            .setMultipleMode(true)
+            .setSelectedImages(images)
+            .setMaxSize(10)
+            .setBackgroundColor("#212121")
+            .setAlwaysShowDoneButton(false)
+            .setRequestCode(100)
+            .setKeepScreenOn(true)
+            .start()
+
+    }
+
+    private fun startImagesList() {
+
+
+        ImagePicker.with(this)
+            .setFolderMode(false)
             .setCameraOnly(false)
             .setFolderTitle("Album")
             .setShowCamera(true)
