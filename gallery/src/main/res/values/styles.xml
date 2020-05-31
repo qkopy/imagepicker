@@ -4,7 +4,7 @@
   ~ Last modified 4/12/18 8:24 PM
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
 
     <style name="GalleryBaseTheme" parent="Theme.AppCompat.NoActionBar" />

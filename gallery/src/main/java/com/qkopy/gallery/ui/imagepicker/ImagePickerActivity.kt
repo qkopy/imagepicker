@@ -21,7 +21,6 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import com.qkopy.gallery.R
 import com.qkopy.gallery.helper.CameraHelper
 import com.qkopy.gallery.helper.LogHelper
@@ -33,9 +32,6 @@ import com.qkopy.gallery.listener.OnImageSelectionListener
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
-import com.qkopy.gallery.widget.ImagePickerToolbar
-import com.qkopy.gallery.widget.ProgressWheel
-import com.qkopy.gallery.widget.SnackBarView
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.util.*
 
@@ -418,8 +414,8 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 setFolderAdapter(folders!!)
             else if (folders?.size ?: 0 > 1)
                 addToFolderAdapter(folders!!.last())
-        }else{
-            setImageAdapter(images!!,config.imageTitle!!)
+        } else {
+            setImageAdapter(images!!, config.imageTitle!!)
         }
     }
 
@@ -431,7 +427,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
     //Here update images on images found in Images list
     override fun showUpdateImage(image: Image) {
-                updateImagesAdapter(image)
+        updateImagesAdapter(image)
     }
 
     override fun showError(throwable: Throwable?) {

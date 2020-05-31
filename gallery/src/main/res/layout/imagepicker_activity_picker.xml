@@ -19,29 +19,27 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+    <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/imagepicker_ic_image" />
 
-        <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:src="@drawable/imagepicker_ic_image" />
-
-        <TextView
-                android:id="@+id/textView2"
-                style="@style/GalleryTextLarge"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:gravity="center_horizontal"
-                android:text="@string/msg_no_images"
-                android:textColor="@color/grey"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/imageView2"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                />
+    <TextView
+            android:id="@+id/textView2"
+            style="@style/GalleryTextLarge"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:gravity="center_horizontal"
+            android:text="@string/msg_no_images"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/imageView2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     <com.qkopy.gallery.widget.ProgressWheel xmlns:wheel="http://schemas.android.com/apk/res-auto"
             android:id="@+id/progressWheel"
