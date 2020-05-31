@@ -2,6 +2,9 @@
 
 android library for imagepicker
 
+Library Size | 186 KB
+APK Size | 3.1 MB
+
 #### Example
 
 ### Adding Library to Project

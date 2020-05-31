@@ -78,28 +78,29 @@ class ImageFileLoader(private val context: Context) {
                             if (folder == null) {
                                 folder = Folder(bucket)
                                 folderMap[bucket] = folder
-                                listener.onFolderAdded(images,ArrayList(folderMap.values))
+                                listener.onFolderAdded(images, ArrayList(folderMap.values))
                             }
                             folder.images!!.add(image)
                             if (isFolderMode) listener.onFolderUpdated(folder)
 
+                        } else {
+                            if (images.size == 1)
+                                listener.onFolderAdded(images, ArrayList<Folder>())
+                            else
+                                listener.onImageAdded(image)
                         }
-                        listener.onImageAdded(images)
+
+
                     }
-
-
 
 
                 } while (cursor.moveToPrevious())
             }
             cursor.close()
 
-            /* Convert HashMap to ArrayList if not null */
-            var folders: List<Folder>? = ArrayList()
-            if (folderMap != null) {
-                folders = ArrayList(folderMap.values)
+            if ((folderMap != null && folderMap.values.isEmpty()) || images.isEmpty()) {
+                listener.onEmpty()
             }
-            listener.onImageLoaded(images, folders!!)
         }
 
     }

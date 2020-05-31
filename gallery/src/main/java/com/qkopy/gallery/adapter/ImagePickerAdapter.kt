@@ -17,6 +17,7 @@ import com.qkopy.gallery.listener.OnImageClickListener
 import com.qkopy.gallery.listener.OnImageSelectionListener
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter
+import kotlinx.android.synthetic.main.imagepicker_item_image.view.*
 import java.util.*
 
 
@@ -36,7 +37,6 @@ class ImagePickerAdapter(
             inflater.inflate(R.layout.imagepicker_item_image, parent, false)
         return ImageViewHolder(itemView)
     }
-
 
 
     override fun onBindViewHolder(viewHolder: ImageViewHolder, position: Int) {
@@ -118,9 +118,8 @@ class ImagePickerAdapter(
         notifyDataSetChanged()
     }
 
-    fun addImage(image: Image)
-    {
-        if (!this.images.contains(image)){
+    fun addImage(image: Image) {
+        if (!this.images.contains(image)) {
             this.images.add(image)
             notifyItemInserted(this.images.lastIndex)
         }
@@ -169,19 +168,18 @@ class ImagePickerAdapter(
     }
 
 
-
-     class ImageViewHolder(itemView: View) :
+    class ImageViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-         val container: FrameLayout
-         val image: ImageView
-         val alphaView: View
-         val gifIndicator: View
+        val container: FrameLayout
+        val image: ImageView
+        val alphaView: View
+        val gifIndicator: View
 
         init {
             container = itemView as FrameLayout
-            image = itemView.findViewById(R.id.image_thumbnail)
-            alphaView = itemView.findViewById(R.id.view_alpha)
-            gifIndicator = itemView.findViewById(R.id.gif_indicator)
+            image = itemView.image_thumbnail
+            alphaView = itemView.view_alpha
+            gifIndicator = itemView.gif_indicator
         }
     }
 

@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Created by @ajithvgiri on 4/12/18 8:33 PM
   ~ Copyright (c) 2018 . All rights reserved.
   ~ Last modified 4/12/18 7:05 PM
   -->
 
-<com.qkopy.gallery.widget.SquareFrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<com.qkopy.gallery.widget.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -15,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@drawable/image_placeholder"/>
+            android:background="@drawable/image_placeholder" />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -30,12 +28,12 @@
                 style="@style/GalleryTextSmall"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
 
         <TextView
                 android:id="@+id/text_photo_count"
                 style="@style/GalleryTextSmall"
-                android:textColor="@color/grey"/>
+                android:textColor="@color/grey" />
     </LinearLayout>
 
 </com.qkopy.gallery.widget.SquareFrameLayout>

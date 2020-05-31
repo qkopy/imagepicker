@@ -32,20 +32,17 @@ import com.qkopy.gallery.listener.OnImageSelectionListener
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
-import com.qkopy.gallery.widget.ImagePickerToolbar
-import com.qkopy.gallery.widget.ProgressWheel
-import com.qkopy.gallery.widget.SnackBarView
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.util.*
 
 
 class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
-    private lateinit var toolbar: ImagePickerToolbar
+    //private lateinit var toolbar: ImagePickerToolbar
     private lateinit var recyclerViewManager: RecyclerViewManager
-    private lateinit var progressWheel: ProgressWheel
-    private lateinit var emptyLayout: View
-    private lateinit var snackBar: SnackBarView
+    //private lateinit var progressWheel: ProgressWheel
+    //private lateinit var emptyLayout: Group
+    //private lateinit var snackBar: SnackBarView
 
     private lateinit var config: Config
     private var handler: Handler? = null
@@ -97,24 +94,23 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     private fun setupView() {
-        toolbar = findViewById(R.id.toolbar)
-        progressWheel = findViewById(R.id.progressWheel)
-        emptyLayout = findViewById(R.id.layout_empty)
-        snackBar = findViewById(R.id.snackbar)
+
 
         val window = window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = config.getStatusBarColor()
         }
 
+
         progressWheel.setBarColor(config.getProgressBarColor())
-        findViewById<View>(R.id.container).setBackgroundColor(config.getBackgroundColor())
+        container.setBackgroundColor(config.getBackgroundColor())
 
 
     }
 
     private fun setupComponents() {
-        recyclerViewManager = RecyclerViewManager(recyclerView!!, config, resources.configuration.orientation)
+        recyclerViewManager =
+            RecyclerViewManager(recyclerView!!, config, resources.configuration.orientation)
         recyclerViewManager.setupAdapters(imageClickListener, folderClickListener)
         recyclerViewManager.setOnImageSelectionListener(object : OnImageSelectionListener {
             override fun onSelectionUpdate(images: List<Image>) {
@@ -160,11 +156,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         invalidateToolbar()
     }
 
-    private fun updateFolderAdapter(folder: Folder){
+    private fun updateFolderAdapter(folder: Folder) {
         recyclerViewManager.updateFolderAdapter(folder)
     }
 
-    private fun updateImagesAdapter(images: Image){
+    private fun updateImagesAdapter(images: Image) {
         recyclerViewManager.addToImageAdapter(images)
     }
 
@@ -210,7 +206,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackBar!!.show(R.string.msg_no_write_external_storage_permission,
+                    snackbar.show(R.string.msg_no_write_external_storage_permission,
                         object : View.OnClickListener {
                             override fun onClick(v: View?) {
                                 PermissionHelper.openAppSettings(
@@ -257,7 +253,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackBar.show(R.string.msg_no_camera_permission,
+                    snackbar.show(R.string.msg_no_camera_permission,
                         object : View.OnClickListener {
                             override fun onClick(v: View?) {
                                 PermissionHelper.openAppSettings(
@@ -289,7 +285,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        @NonNull permissions: Array<String>,
+        @NonNull grantResults: IntArray
+    ) {
 
         when (requestCode) {
             Config.RC_WRITE_EXTERNAL_STORAGE_PERMISSION -> {
@@ -323,8 +323,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                                     " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
                         )
                     }
-                    //commented due to error in syntax
-                    //break
+
                 }
             }
             Config.RC_CAMERA_PERMISSION -> {
@@ -359,7 +358,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 getData()
             }
         }
-        contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer!!)
+        contentResolver.registerContentObserver(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            false,
+            observer!!
+        )
     }
 
     override fun onDestroy() {
@@ -382,7 +385,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     override fun onBackPressed() {
-        recyclerViewManager!!.handleBack(object : OnBackAction {
+        recyclerViewManager.handleBack(object : OnBackAction {
             override fun onBackToFolder() {
                 invalidateToolbar()
             }
@@ -401,38 +404,30 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     override fun showLoading(isLoading: Boolean) {
         progressWheel.visibility = if (isLoading) View.VISIBLE else View.GONE
         recyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
-        emptyLayout.visibility = View.GONE
+        layout_empty.visibility = View.GONE
     }
 
-    override fun showFetchCompleted(images: List<Image>, folders: List<Folder>) {
-        if (config.isFolderMode) {
-            //setFolderAdapter(folders!!)
-        } else {
-            //setImageAdapter(images!!, config.imageTitle!!)
-        }
-    }
-
+    //Here set data to adapter and add data to adapter when an image is found
     override fun showFetching(images: List<Image>?, folders: List<Folder>?) {
-        if (config.isFolderMode){
-            if (folders?.size?:0==1)
+        if (config.isFolderMode) {
+            if (folders?.size ?: 0 == 1)
                 setFolderAdapter(folders!!)
-            else if (folders?.size?:0>1)
+            else if (folders?.size ?: 0 > 1)
                 addToFolderAdapter(folders!!.last())
+        } else {
+            setImageAdapter(images!!, config.imageTitle!!)
         }
     }
 
+    //Here Update the images in a folder when an image is found
     override fun showUpdateFolder(folder: Folder) {
         if (config.isFolderMode)
             updateFolderAdapter(folder)
     }
 
-    override fun showUpdateImage(images: List<Image>?) {
-        if (!config.isFolderMode)
-            {
-                if (images?.size?:0==1)
-                setImageAdapter(images!!,config.imageTitle!!)
-            else if (images?.size?:0>1)
-                updateImagesAdapter(images!!.last())}
+    //Here update images on images found in Images list
+    override fun showUpdateImage(image: Image) {
+        updateImagesAdapter(image)
     }
 
     override fun showError(throwable: Throwable?) {
@@ -446,7 +441,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     override fun showEmpty() {
         progressWheel.visibility = View.GONE
         recyclerView!!.visibility = View.GONE
-        emptyLayout.visibility = View.VISIBLE
+        layout_empty.visibility = View.VISIBLE
     }
 
     override fun showCapturedImage(images: List<Image>?) {

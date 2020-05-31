@@ -6,7 +6,6 @@
 
 package com.qkopy.gallery.model
 
-import com.qkopy.gallery.model.Image
 import java.util.*
 
 class Folder(var folderName: String?) {

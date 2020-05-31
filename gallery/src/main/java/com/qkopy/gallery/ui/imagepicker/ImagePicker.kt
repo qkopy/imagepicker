@@ -9,8 +9,6 @@ import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.model.SavePath
 import com.qkopy.gallery.ui.camera.CameraActivty
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ImagePicker(builder: Builder) {
     protected var config: Config
@@ -75,8 +73,8 @@ class ImagePicker(builder: Builder) {
     }
 
     abstract class Builder : BaseBuilder {
-        constructor(activity: Activity?) : super(activity) {}
-        constructor(fragment: Fragment) : super(fragment.context) {}
+        constructor(activity: Activity?) : super(activity)
+        constructor(fragment: Fragment) : super(fragment.context)
 
         fun setToolbarColor(toolbarColor: String?): Builder {
             config.setToolbarColor(toolbarColor)
@@ -159,7 +157,7 @@ class ImagePicker(builder: Builder) {
         }
 
         fun setAlwaysShowDoneButton(isAlwaysShowDoneButton: Boolean): Builder {
-            config.isAlwaysShowDoneButton= isAlwaysShowDoneButton
+            config.isAlwaysShowDoneButton = isAlwaysShowDoneButton
             return this
         }
 
@@ -188,32 +186,19 @@ class ImagePicker(builder: Builder) {
         init {
             config = Config()
             val resources = context!!.resources
-            //config.setCameraOnly(false)
             config.isCameraOnly = false
-            //config.setMultipleMode(true)
             config.isMultipleMode = true
-            //config.setFolderMode(true)
             config.isFolderMode = true
-            //config.setShowCamera(config.isShowCamera())
             config.isShowCamera = config.isShowCamera
-            //config.setMaxSize(Config.MAX_SIZE)
             config.maxSize = Config.MAX_SIZE
             config.doneTitle = resources.getString(R.string.action_done)
-            //config.setDoneTitle(resources.getString(R.string.action_done))
             config.folderTitle = resources.getString(R.string.title_folder)
-            //config.setFolderTitle(resources.getString(R.string.title_folder))
             config.imageTitle = resources.getString(R.string.title_image)
-            //config.setImageTitle(resources.getString(R.string.title_image))
             config.limitMessage = resources.getString(R.string.msg_limit_images)
-            //config.setLimitMessage(resources.getString(R.string.msg_limit_images))
             config.savePath = SavePath.DEFAULT
-            //config.setSavePath(SavePath.DEFAULT)
             config.isAlwaysShowDoneButton = false
-            //config.setAlwaysShowDoneButton(false)
             config.isKeepScreenOn = false
-            //config.setKeepScreenOn(false)
             config.selectedImages = ArrayList<Image>()
-            //config.setSelectedImages(ArrayList<Image>())
         }
     }
 

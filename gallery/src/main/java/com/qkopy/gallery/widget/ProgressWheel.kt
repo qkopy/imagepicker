@@ -699,7 +699,7 @@ class ProgressWheel : View {
         var linearProgress = false
         var fillRadius = false
 
-        constructor(superState: Parcelable?) : super(superState) {}
+        constructor(superState: Parcelable?) : super(superState)
         private constructor(`in`: Parcel) : super(`in`) {
             mProgress = `in`.readFloat()
             mTargetProgress = `in`.readFloat()

@@ -31,7 +31,7 @@ class DefaultCameraModule : CameraModule, Serializable {
                 FileProvider.getUriForFile(appContext, providerName, imageFile)
             imagePath = imageFile.absolutePath
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-            ImageHelper.grantAppPermission(context!!, intent, uri)
+            ImageHelper.grantAppPermission(context, intent, uri)
             return intent
         }
         return null

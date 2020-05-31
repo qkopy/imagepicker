@@ -128,7 +128,7 @@ class RecyclerViewManager(
     ) {
         imageAdapter!!.setData(images)
         setItemDecoration(imageColumns)
-        recyclerView.setAdapter(imageAdapter)
+        recyclerView.adapter = imageAdapter
         this.title = title
         isShowingFolder = false
     }
@@ -136,20 +136,23 @@ class RecyclerViewManager(
     fun setFolderAdapter(folders: List<Folder>?) {
         folderAdapter!!.setData(folders)
         setItemDecoration(folderColumns)
-        recyclerView.setAdapter(folderAdapter)
+        recyclerView.adapter = folderAdapter
         isShowingFolder = true
         if (foldersState != null) {
             layoutManager!!.spanCount = folderColumns
             recyclerView.layoutManager!!.onRestoreInstanceState(foldersState)
         }
     }
-    fun addToImageAdapter(image: Image){
+
+    fun addToImageAdapter(image: Image) {
         imageAdapter!!.addImage(image)
     }
+
     fun addToFolderAdapter(folder: Folder) {
         folderAdapter!!.addData(folder)
     }
-    fun updateFolderAdapter(folder: Folder){
+
+    fun updateFolderAdapter(folder: Folder) {
         folderAdapter!!.updateData(folder)
     }
 

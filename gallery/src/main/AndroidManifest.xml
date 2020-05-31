@@ -1,16 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.qkopy.gallery">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+        package="com.qkopy.gallery">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application>
         <activity
                 android:name=".ui.imagepicker.ImagePickerActivity"
                 android:configChanges="orientation|screenSize"
-                android:theme="@style/GalleryTheme"/>
+                android:theme="@style/GalleryTheme" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -19,7 +20,7 @@
                 android:grantUriPermissions="true">
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/imagepicker_file_paths"/>
+                    android:resource="@xml/imagepicker_file_paths" />
         </provider>
 
     </application>

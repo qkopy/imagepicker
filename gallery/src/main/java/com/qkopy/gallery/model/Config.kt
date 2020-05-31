@@ -9,7 +9,6 @@ import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import android.text.TextUtils
-import kotlin.collections.ArrayList
 
 class Config : Parcelable {
     private var toolbarColor: String? = null
@@ -33,7 +32,7 @@ class Config : Parcelable {
     var requestCode = 0
     var selectedImages: ArrayList<Image>? = null
 
-    constructor() {}
+    constructor()
     protected constructor(`in`: Parcel) {
         toolbarColor = `in`.readString()
         statusBarColor = `in`.readString()

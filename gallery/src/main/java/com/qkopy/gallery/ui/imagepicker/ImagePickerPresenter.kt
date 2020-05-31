@@ -29,31 +29,11 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
         if (!isViewAttached) return
         view!!.showLoading(true)
         imageLoader.loadDeviceImages(isFolderMode, object : OnImageLoaderListener {
-            override fun onImageLoaded(
-                images: List<Image>,
-                folders: List<Folder>
-            ) {
-                handler.post {
-                    if (isViewAttached) {
-                        view!!.showFetchCompleted(
-                            images,
-                            folders
-                        )
-                        val isEmpty =
-                            folders.isEmpty() and  images.isEmpty()
-                        if (isEmpty) {
-                            view!!.showEmpty()
-                        } else {
-                            view!!.showLoading(false)
-                        }
-                    }
-                }
-            }
 
             override fun onFolderAdded(images: List<Image>, folders: List<Folder>) {
                 handler.post {
-                    if (isViewAttached){
-                        view!!.showFetching(images,folders)
+                    if (isViewAttached) {
+                        view!!.showFetching(images, folders)
                         val isEmpty =
                             folders.isEmpty()
                         if (isEmpty) {
@@ -65,24 +45,18 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                 }
             }
 
-            override fun onImageAdded(images:List<Image>) {
+            override fun onImageAdded(image: Image) {
                 handler.post {
-                    if (isViewAttached){
-                        view!!.showUpdateImage(images)
-                        val isEmpty =
-                            images.isEmpty()
-                        if (isEmpty) {
-                            view!!.showEmpty()
-                        } else {
-                            view!!.showLoading(false)
-                        }
+                    if (isViewAttached) {
+                        view!!.showUpdateImage(image)
+                        view!!.showLoading(false)
                     }
                 }
             }
 
             override fun onFolderUpdated(folder: Folder) {
                 handler.post {
-                    if (isViewAttached){
+                    if (isViewAttached) {
                         view!!.showUpdateFolder(folder)
                     }
                 }
@@ -95,6 +69,14 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
                     }
                 }
             }
+
+            override fun onEmpty() {
+                handler.post {
+                    if (isViewAttached) {
+                        view!!.showEmpty()
+                    }
+                }
+            }
         })
     }
 
@@ -104,7 +86,7 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
         requestCode: Int
     ) {
         val context = activity.applicationContext
-        val intent = cameraModule.getCameraIntent(activity,config)
+        val intent = cameraModule.getCameraIntent(activity, config)
         if (intent == null) {
             Toast.makeText(
                 context,

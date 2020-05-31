@@ -9,11 +9,7 @@ class Image : Parcelable {
     var path: String
     var selected = false
 
-    //    public Image(long id, String name, String path) {
-    //        this.id = id;
-    //        this.name = name;
-    //        this.path = path;
-    //    }
+
     constructor(
         id: Long,
         name: String,
