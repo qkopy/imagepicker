@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.qkopy.gallery.model.Config
+import com.qkopy.gallery.model.Config.Companion.RC_PICK_IMAGES
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,6 +25,34 @@ class MainActivity : AppCompatActivity() {
         btn.setOnClickListener {
             startImagesList()
         }
+
+        btnTest.setOnClickListener {
+            openImagePicker()
+        }
+    }
+
+    fun openImagePicker() {
+        val images = ArrayList<Image>()
+        var selectImageCount =
+            4//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
+
+        if (selectImageCount == 0) {
+            selectImageCount = 1
+        }
+
+        ImagePicker.with(this)
+            .setFolderMode(true)
+            .setCameraOnly(false)
+            .setFolderTitle("album")
+            .setShowCamera(true)
+            .setMultipleMode(true)
+            .setSelectedImages(images)
+            .setMaxSize(selectImageCount)
+            .setBackgroundColor("#212121")
+            .setAlwaysShowDoneButton(false)
+            .setRequestCode(100)
+            .setKeepScreenOn(true)
+            .start()
     }
 
     private fun startFoldersList() {
