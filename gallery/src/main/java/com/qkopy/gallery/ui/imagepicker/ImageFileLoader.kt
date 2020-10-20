@@ -2,6 +2,7 @@ package com.qkopy.gallery.ui.imagepicker
 
 import android.content.Context
 import android.provider.MediaStore
+import android.util.Log
 import com.qkopy.gallery.listener.OnImageLoaderListener
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
@@ -74,11 +75,16 @@ class ImageFileLoader(private val context: Context) {
                             Image(id, name, path, false)
                         images.add(image)
                         if (folderMap != null) {
-                            var folder = folderMap[bucket]
+                            var folder = folderMap[bucket ?: "Other_Images_"]
                             if (folder == null) {
-                                folder = Folder(bucket)
-                                folderMap[bucket] = folder
+                                if (bucket==null){
+                                    Log.e("BUCKETNULL:",image.name+"::"+
+                                    image.path+"::")
+                                }
+                                folder = Folder(bucket ?: "")
+                                folderMap[bucket ?: "Other_Images_"] = folder
                                 listener.onFolderAdded(images, ArrayList(folderMap.values))
+                                Log.d("FOLDERSIZE:",folderMap.values.size.toString())
                             }
                             folder.images!!.add(image)
                             if (isFolderMode) listener.onFolderUpdated(folder)
