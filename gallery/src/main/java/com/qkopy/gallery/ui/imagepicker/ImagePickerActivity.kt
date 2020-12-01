@@ -11,6 +11,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.database.ContentObserver
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -32,8 +33,11 @@ import com.qkopy.gallery.listener.OnImageSelectionListener
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
+import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
@@ -50,6 +54,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     private lateinit var presenter: ImagePickerPresenter
     private val logger = LogHelper.instance
 
+    private var images:List<Image>? = null
 
     private val imageClickListener = object : OnImageClickListener {
         override fun onImageClick(view: View, position: Int, isSelected: Boolean): Boolean {
@@ -282,6 +287,24 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         if (requestCode == Config.RC_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
             presenter.finishCaptureImage(this, data, config)
         }
+
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK){
+            val outputUri = data?.let { UCrop.getOutput(it) }
+            images?.let {
+                val c = it[0]
+                outputUri?.let {uri-> c.path = uri.path }
+
+                val list = ArrayList<Image>()
+                list.add(c)
+                val dataResult = Intent()
+                dataResult.putParcelableArrayListExtra(Config.EXTRA_IMAGES, list as ArrayList<out Parcelable>)
+                setResult(Activity.RESULT_OK,dataResult)
+                finish()
+            }
+        }
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == UCrop.RESULT_ERROR){
+            Toast.makeText(this,"Crop Error",Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -455,8 +478,20 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     override fun finishPickImages(images: List<Image>?) {
         val data = Intent()
         data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
-        setResult(Activity.RESULT_OK, data)
-        finish()
+
+        if (config.isMultipleMode==false && config.isCropEnabled == true){
+            this.images = images
+            val img = images[0].name.split(".")[0]
+            val ext = images[0].name.split(".")[1]
+            UCrop.of(Uri.fromFile(File(images[0].path)), Uri.fromFile(File.createTempFile(img,".$ext")))
+                .withAspectRatio(1f,1f)
+                .start(this)
+        } else {
+
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
+
     }
 }
 

@@ -116,6 +116,11 @@ class ImagePicker(builder: Builder) {
             return this
         }
 
+        fun setIsCropEnabled(isCropEnabled: Boolean): Builder {
+            config.isCropEnabled = isCropEnabled
+            return this
+        }
+
         fun setFolderMode(isFolderMode: Boolean): Builder {
             config.isFolderMode = isFolderMode
             return this
@@ -188,6 +193,7 @@ class ImagePicker(builder: Builder) {
             val resources = context!!.resources
             config.isCameraOnly = false
             config.isMultipleMode = true
+            config.isCropEnabled = false
             config.isFolderMode = true
             config.isShowCamera = config.isShowCamera
             config.maxSize = Config.MAX_SIZE

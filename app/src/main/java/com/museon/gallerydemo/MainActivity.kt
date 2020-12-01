@@ -3,13 +3,16 @@ package com.museon.gallerydemo
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Config.Companion.RC_PICK_IMAGES
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     fun openImagePicker() {
         val images = ArrayList<Image>()
         var selectImageCount =
-            4//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
+            1//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
 
         if (selectImageCount == 0) {
             selectImageCount = 1
@@ -45,7 +48,8 @@ class MainActivity : AppCompatActivity() {
             .setCameraOnly(false)
             .setFolderTitle("album")
             .setShowCamera(true)
-            .setMultipleMode(true)
+            .setMultipleMode(false)
+            .setIsCropEnabled(true)
             .setSelectedImages(images)
             .setMaxSize(selectImageCount)
             .setBackgroundColor("#212121")
@@ -99,6 +103,10 @@ class MainActivity : AppCompatActivity() {
         // image picker
         if (requestCode == Config.RC_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
             images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES)
+            imageview.setImageURI(Uri.fromFile(File(images[0].path)))
+            images.forEach {
+                Log.d("Image:",it.path)
+            }
             //adapter!!.setData(images)
         }
     }

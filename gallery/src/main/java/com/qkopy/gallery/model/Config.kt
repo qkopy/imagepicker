@@ -21,6 +21,7 @@ class Config : Parcelable {
     var isMultipleMode = false
     var isFolderMode = false
     var isShowCamera = false
+    var isCropEnabled = false
     var maxSize = 0
     var doneTitle: String? = null
     var folderTitle: String? = null
@@ -42,6 +43,7 @@ class Config : Parcelable {
         backgroundColor = `in`.readString()
         isCameraOnly = `in`.readByte().toInt() != 0
         isMultipleMode = `in`.readByte().toInt() != 0
+        isCropEnabled = `in`.readByte().toInt() != 0
         isFolderMode = `in`.readByte().toInt() != 0
         isShowCamera = `in`.readByte().toInt() != 0
         maxSize = `in`.readInt()
@@ -129,6 +131,7 @@ class Config : Parcelable {
         dest.writeString(backgroundColor)
         dest.writeByte(if (isCameraOnly) 1.toByte() else 0.toByte())
         dest.writeByte(if (isMultipleMode) 1.toByte() else 0.toByte())
+        dest.writeByte(if (isCropEnabled) 1.toByte() else 0.toByte())
         dest.writeByte(if (isFolderMode) 1.toByte() else 0.toByte())
         dest.writeByte(if (isShowCamera) 1.toByte() else 0.toByte())
         dest.writeInt(maxSize)
