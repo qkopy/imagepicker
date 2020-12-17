@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     fun openImagePicker() {
         val images = ArrayList<Image>()
         var selectImageCount =
-            1//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
+            4//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
 
         if (selectImageCount == 0) {
             selectImageCount = 1
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             .setCameraOnly(false)
             .setFolderTitle("album")
             .setShowCamera(true)
-            .setMultipleMode(false)
+            .setMultipleMode(true)
             .setIsCropEnabled(true)
             .setSelectedImages(images)
             .setMaxSize(selectImageCount)

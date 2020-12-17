@@ -305,6 +305,14 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         if (requestCode == UCrop.REQUEST_CROP && resultCode == UCrop.RESULT_ERROR){
             Toast.makeText(this,"Crop Error",Toast.LENGTH_SHORT).show()
         }
+
+        if (requestCode == 1212 && resultCode == Activity.RESULT_OK){
+            val imgs = data?.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
+            val data = Intent()
+            data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, imgs as ArrayList<out Parcelable>)
+            setResult(Activity.RESULT_OK,data)
+            finish()
+        }
     }
 
 
@@ -479,15 +487,19 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         val data = Intent()
         data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
 
-        if (config.isMultipleMode==false && config.isCropEnabled == true){
-            this.images = images
-            val img = images[0].name.split(".")[0]
-            val ext = images[0].name.split(".")[1]
-            UCrop.of(Uri.fromFile(File(images[0].path)), Uri.fromFile(File.createTempFile(img,".$ext")))
-                .withAspectRatio(1f,1f)
-                .start(this)
+//        if (config.isMultipleMode==false && config.isCropEnabled == true){
+        if (config.isCropEnabled == true){
+            val intent = Intent(this,ImagePickerFinalActivity::class.java)
+            intent.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
+            intent.putExtra(Config.EXTRA_CONFIG, config)
+            startActivityForResult(intent,1212)
+//            this.images = images
+//            val img = images[0].name.split(".")[0]
+//            val ext = images[0].name.split(".")[1]
+//            UCrop.of(Uri.fromFile(File(images[0].path)), Uri.fromFile(File.createTempFile(img,".$ext")))
+//                .withAspectRatio(1f,1f)
+//                .start(this)
         } else {
-
             setResult(Activity.RESULT_OK, data)
             finish()
         }
