@@ -13,7 +13,30 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
+    <ImageView
+            android:id="@+id/previous"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:elevation="16dp"
+            android:backgroundTint="@color/black"
+            android:background="@color/grey"
+            android:src="@drawable/ic_baseline_chevron_left_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    <ImageView
+            android:id="@+id/next"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:elevation="16dp"
+            android:backgroundTint="@color/black"
+            android:background="@color/grey"
+            android:src="@drawable/ic_baseline_chevron_right_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewImages"
             android:layout_width="match_parent"

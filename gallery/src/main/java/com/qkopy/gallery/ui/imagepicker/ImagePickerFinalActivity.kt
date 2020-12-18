@@ -50,15 +50,28 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
             }
             val snapHelper = PagerSnapHelper()
             snapHelper.attachToRecyclerView(recyclerViewImages)
+
+            next.setOnClickListener { next() }
+            previous.setOnClickListener { previous() }
         }
+
     }
 
     private fun setupToolbar() {
         toolbar.let { imagePickerToolbar ->
             config.let { imagePickerToolbar.config(it) }
-            imagePickerToolbar.showDoneButton(true)
+            imagePickerToolbar.showOnlyDoneButton(true)
             imagePickerToolbar.setOnDoneClickListener(doneClickListener)
         }
+    }
+
+    private fun next(){
+        val llayout = recyclerViewImages.layoutManager as LinearLayoutManager
+        recyclerViewImages.smoothScrollToPosition(llayout.findLastVisibleItemPosition()+1)
+    }
+    private fun previous(){
+        val llayout = recyclerViewImages.layoutManager as LinearLayoutManager
+        recyclerViewImages.smoothScrollToPosition(llayout.findFirstVisibleItemPosition()-1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,6 +98,6 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
     }
 
     override fun onClickClose(image: Image) {
-       // TODO("Not yet implemented")
+       imageCropAdapter.removeImage(image)
     }
 }

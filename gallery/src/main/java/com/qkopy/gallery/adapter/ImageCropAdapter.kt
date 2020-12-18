@@ -43,6 +43,12 @@ class ImageCropAdapter(val activity: Activity,val images:ArrayList<Image>, val l
         }
     }
 
+    fun removeImage(image: Image){
+        val index = images.indexOf(image)
+        images.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
     class ImageCropHolder(itemView:View) : RecyclerView.ViewHolder(itemView){
 
         fun bind(image: Image,activity: Activity,listener: CropListener){
@@ -58,6 +64,9 @@ class ImageCropAdapter(val activity: Activity,val images:ArrayList<Image>, val l
                 .into(itemView.imgCrop)
             itemView.btnCrop.setOnClickListener {
                 listener.onClickCrop(image)
+            }
+            itemView.btnClose.setOnClickListener{
+                listener.onClickClose(image)
             }
         }
     }

@@ -87,6 +87,12 @@ class ImagePickerToolbar : RelativeLayout {
         cameraImage!!.visibility = if (!isShow) View.VISIBLE else View.GONE
     }
 
+    fun showOnlyDoneButton(isShow: Boolean) {
+        doneText!!.visibility = if (isShow) View.VISIBLE else View.GONE
+        selectedText!!.visibility = View.GONE
+        cameraImage!!.visibility = View.GONE
+    }
+
     fun updateSelectedCount(count: Int) {
         selectedText!!.text = "$count/${config.maxSize}"
     }
