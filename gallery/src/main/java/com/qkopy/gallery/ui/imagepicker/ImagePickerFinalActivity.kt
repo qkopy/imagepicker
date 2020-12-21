@@ -55,7 +55,29 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
             previous.setOnClickListener { previous() }
 
             singleImage(it.size<=1)
+
+            recyclerViewImages.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (layoutmngr.findFirstVisibleItemPosition()==0){
+                        previous.visibility= View.GONE
+                    } else {
+                        previous.visibility = View.VISIBLE
+                    }
+                    if (layoutmngr.findLastVisibleItemPosition()==images.size-1){
+                        next.visibility= View.GONE
+                    } else {
+                        next.visibility = View.VISIBLE
+                    }
+                }
+            })
+
         }
+
     }
 
     private fun setupToolbar() {
