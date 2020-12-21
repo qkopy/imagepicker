@@ -53,8 +53,9 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
 
             next.setOnClickListener { next() }
             previous.setOnClickListener { previous() }
-        }
 
+            singleImage(it.size<=1)
+        }
     }
 
     private fun setupToolbar() {
@@ -62,6 +63,20 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
             config.let { imagePickerToolbar.config(it) }
             imagePickerToolbar.showOnlyDoneButton(true)
             imagePickerToolbar.setOnDoneClickListener(doneClickListener)
+            imagePickerToolbar.setOnBackClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    finish()
+                }
+            })
+        }
+    }
+    private fun singleImage(isSingle:Boolean){
+        if(isSingle){
+            next.visibility = View.GONE
+            previous.visibility = View.GONE
+        } else {
+            next.visibility = View.VISIBLE
+            previous.visibility = View.VISIBLE
         }
     }
 
