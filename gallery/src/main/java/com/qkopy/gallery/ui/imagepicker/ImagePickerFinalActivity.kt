@@ -3,11 +3,10 @@ package com.qkopy.gallery.ui.imagepicker
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,15 +20,18 @@ import kotlinx.android.synthetic.main.activity_image_picker_final.toolbar
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.io.File
 
-class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListener {
-    private var image:Image? = null
+class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListener {
+    private var image: Image? = null
     lateinit var imageCropAdapter: ImageCropAdapter
     private val doneClickListener = View.OnClickListener { onDone() }
     private lateinit var config: Config
     private fun onDone() {
         val data = Intent()
-        data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, imageCropAdapter.images as ArrayList<out Parcelable>)
-        setResult(Activity.RESULT_OK,data)
+        data.putParcelableArrayListExtra(
+            Config.EXTRA_IMAGES,
+            imageCropAdapter.images as ArrayList<out Parcelable>
+        )
+        setResult(Activity.RESULT_OK, data)
         finish()
     }
 
@@ -40,9 +42,11 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
         setupToolbar()
         val images = intent.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
         images?.let {
-            imageCropAdapter = ImageCropAdapter(this@ImagePickerFinalActivity,it,
-                this@ImagePickerFinalActivity)
-            val layoutmngr = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+            imageCropAdapter = ImageCropAdapter(
+                this@ImagePickerFinalActivity, it,
+                this@ImagePickerFinalActivity
+            )
+            val layoutmngr = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
             recyclerViewImages.apply {
                 layoutManager = layoutmngr
@@ -54,7 +58,7 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
             next.setOnClickListener { next() }
             previous.setOnClickListener { previous() }
 
-            singleImage(it.size<=1)
+            singleImage(it.size <= 1)
 
             recyclerViewImages.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -63,13 +67,13 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (layoutmngr.findFirstVisibleItemPosition()==0){
-                        previous.visibility= View.GONE
+                    if (layoutmngr.findFirstVisibleItemPosition() == 0) {
+                        previous.visibility = View.GONE
                     } else {
                         previous.visibility = View.VISIBLE
                     }
-                    if (layoutmngr.findLastVisibleItemPosition()==images.size-1){
-                        next.visibility= View.GONE
+                    if (layoutmngr.findLastVisibleItemPosition() == images.size - 1) {
+                        next.visibility = View.GONE
                     } else {
                         next.visibility = View.VISIBLE
                     }
@@ -92,8 +96,9 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
             })
         }
     }
-    private fun singleImage(isSingle:Boolean){
-        if(isSingle){
+
+    private fun singleImage(isSingle: Boolean) {
+        if (isSingle) {
             next.visibility = View.GONE
             previous.visibility = View.GONE
         } else {
@@ -102,22 +107,23 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
         }
     }
 
-    private fun next(){
+    private fun next() {
         val llayout = recyclerViewImages.layoutManager as LinearLayoutManager
-        recyclerViewImages.smoothScrollToPosition(llayout.findLastVisibleItemPosition()+1)
+        recyclerViewImages.smoothScrollToPosition(llayout.findLastVisibleItemPosition() + 1)
     }
-    private fun previous(){
+
+    private fun previous() {
         val llayout = recyclerViewImages.layoutManager as LinearLayoutManager
-        recyclerViewImages.smoothScrollToPosition(llayout.findFirstVisibleItemPosition()-1)
+        recyclerViewImages.smoothScrollToPosition(llayout.findFirstVisibleItemPosition() - 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK){
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val outputUri = data?.let { UCrop.getOutput(it) }
 
             image?.let {
-                outputUri?.let {uri-> it.path = uri.path }
+                outputUri?.let { uri -> it.path = uri.path }
                 imageCropAdapter.updateItem(it)
 
             }
@@ -128,13 +134,13 @@ class ImagePickerFinalActivity : AppCompatActivity(),ImageCropAdapter.CropListen
         val imgFile = File(image.path)
         val img = image.name.split(".")[0]
         val ext = image.name.split(".")[1]
-        UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img,".$ext")))
-            .withAspectRatio(1f,1f)
+        UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
+            .withAspectRatio(1f, 1f)
             .start(this)
         this.image = image
     }
 
     override fun onClickClose(image: Image) {
-       imageCropAdapter.removeImage(image)
+        imageCropAdapter.removeImage(image)
     }
 }

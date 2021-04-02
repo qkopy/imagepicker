@@ -32,6 +32,7 @@ class Config : Parcelable {
     var isKeepScreenOn = false
     var requestCode = 0
     var selectedImages: ArrayList<Image>? = null
+    var isCropMandatory = false
 
     constructor()
     protected constructor(`in`: Parcel) {
@@ -44,6 +45,7 @@ class Config : Parcelable {
         isCameraOnly = `in`.readByte().toInt() != 0
         isMultipleMode = `in`.readByte().toInt() != 0
         isCropEnabled = `in`.readByte().toInt() != 0
+        isCropMandatory = `in`.readByte().toInt() != 0
         isFolderMode = `in`.readByte().toInt() != 0
         isShowCamera = `in`.readByte().toInt() != 0
         maxSize = `in`.readInt()
@@ -132,6 +134,7 @@ class Config : Parcelable {
         dest.writeByte(if (isCameraOnly) 1.toByte() else 0.toByte())
         dest.writeByte(if (isMultipleMode) 1.toByte() else 0.toByte())
         dest.writeByte(if (isCropEnabled) 1.toByte() else 0.toByte())
+        dest.writeByte(if (isCropMandatory) 1.toByte() else 0.toByte())
         dest.writeByte(if (isFolderMode) 1.toByte() else 0.toByte())
         dest.writeByte(if (isShowCamera) 1.toByte() else 0.toByte())
         dest.writeInt(maxSize)

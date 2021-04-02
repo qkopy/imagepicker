@@ -121,6 +121,11 @@ class ImagePicker(builder: Builder) {
             return this
         }
 
+        fun setIsCropMandatory(isCropMandatory: Boolean): Builder {
+            config.isCropMandatory = isCropMandatory
+            return this
+        }
+
         fun setFolderMode(isFolderMode: Boolean): Builder {
             config.isFolderMode = isFolderMode
             return this

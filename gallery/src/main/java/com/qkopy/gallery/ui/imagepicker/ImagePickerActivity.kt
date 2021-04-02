@@ -405,7 +405,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         }
 
         if (observer != null) {
-            contentResolver.unregisterContentObserver(observer)
+            contentResolver.unregisterContentObserver(observer!!)
             observer = null
         }
 
@@ -489,10 +489,33 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
 //        if (config.isMultipleMode==false && config.isCropEnabled == true){
         if (config.isCropEnabled == true){
-            val intent = Intent(this,ImagePickerFinalActivity::class.java)
-            intent.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
-            intent.putExtra(Config.EXTRA_CONFIG, config)
-            startActivityForResult(intent,1212)
+
+            if (config.isCropMandatory && images.size == 1) {
+                this.images = images
+                images?.let {
+                    val image = it[0]
+                    val imgFile = File(image.path)
+                    val img = image.name.split(".")[0]
+                    val ext = image.name.split(".")[1]
+                    val options = UCrop.Options()
+                    options.apply {
+                        this.setHideBottomControls(true)
+                    }
+                    UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
+                        .withAspectRatio(1f, 1f)
+                        .withOptions(options)
+                        .start(this)
+                }
+
+            } else {
+                val intent = Intent(this,ImagePickerFinalActivity::class.java)
+                intent.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
+                intent.putExtra(Config.EXTRA_CONFIG, config)
+
+                startActivityForResult(intent,1212)
+            }
+
+
 //            this.images = images
 //            val img = images[0].name.split(".")[0]
 //            val ext = images[0].name.split(".")[1]

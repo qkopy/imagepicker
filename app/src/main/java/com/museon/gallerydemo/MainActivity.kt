@@ -3,12 +3,12 @@ package com.museon.gallerydemo
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.qkopy.gallery.model.Config
-import com.qkopy.gallery.model.Config.Companion.RC_PICK_IMAGES
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     fun openImagePicker() {
         val images = ArrayList<Image>()
         var selectImageCount =
-            4//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
+            1//postViewModel.remoteConfig.getLong(REMOTE_CONFIG_MAX_IMAGE_SIZE).toInt()
 
         if (selectImageCount == 0) {
             selectImageCount = 1
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             .setCameraOnly(false)
             .setFolderTitle("album")
             .setShowCamera(true)
-            .setMultipleMode(true)
+            .setMultipleMode(false)
             .setIsCropEnabled(true)
             .setSelectedImages(images)
             .setMaxSize(selectImageCount)
@@ -67,9 +67,11 @@ class MainActivity : AppCompatActivity() {
             .setCameraOnly(false)
             .setFolderTitle("Album")
             .setShowCamera(true)
-            .setMultipleMode(true)
+            .setMultipleMode(false)
             .setSelectedImages(images)
-            .setMaxSize(10)
+            .setMaxSize(1)
+            .setIsCropEnabled(true)
+            .setIsCropMandatory(true)
             .setBackgroundColor("#212121")
             .setAlwaysShowDoneButton(false)
             .setRequestCode(100)
@@ -103,9 +105,22 @@ class MainActivity : AppCompatActivity() {
         // image picker
         if (requestCode == Config.RC_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
             images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES)
-            imageview.setImageURI(Uri.fromFile(File(images[0].path)))
+            val imageFile = File(images[0].path)
+            imageview.setImageURI(Uri.fromFile(imageFile))
+            val bitmap = BitmapFactory.decodeFile(imageFile.path)
+//            val palette = Palette.from(bitmap).setRegion(0,0,bitmap.width/2,bitmap.height/2)
+//                .generate()
+//            val dark = palette.getDarkMutedColor(ContextCompat.getColor(this,R.color.black))
+//            val dominant = palette.getDominantColor(ContextCompat.getColor(this,R.color.black))
+//            val vibrant = palette.getVibrantColor(ContextCompat.getColor(this,R.color.black))
+//            val lightm = palette.getLightMutedColor(ContextCompat.getColor(this,R.color.black))
+//            val muted = palette.getMutedColor(ContextCompat.getColor(this,R.color.black))
+//            color1.setBackgroundColor(muted)
+//            color2.setBackgroundColor(dominant)
+//            color3.setBackgroundColor(vibrant)
+//            color4.setBackgroundColor(lightm)
             images.forEach {
-                Log.d("Image:",it.path)
+                Log.d("Image:", it.path)
             }
             //adapter!!.setData(images)
         }
