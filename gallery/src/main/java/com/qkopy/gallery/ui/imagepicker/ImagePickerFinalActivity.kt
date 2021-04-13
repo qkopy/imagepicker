@@ -2,6 +2,8 @@ package com.qkopy.gallery.ui.imagepicker
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -15,10 +17,12 @@ import com.qkopy.gallery.adapter.ImageCropAdapter
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
 import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.util.BitmapLoadUtils.calculateInSampleSize
 import kotlinx.android.synthetic.main.activity_image_picker_final.*
 import kotlinx.android.synthetic.main.activity_image_picker_final.toolbar
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.io.File
+import java.io.FileOutputStream
 
 class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListener {
     private var image: Image? = null
@@ -134,9 +138,28 @@ class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListe
         val imgFile = File(image.path)
         val img = image.name.split(".")[0]
         val ext = image.name.split(".")[1]
-        UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
-            .withAspectRatio(1f, 1f)
-            .start(this)
+
+        val opt = BitmapFactory.Options()
+        opt.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(image.path, opt)
+        val inSample = calculateInSampleSize(opt, 512, 512)
+        opt.inSampleSize = inSample
+        opt.inJustDecodeBounds = false
+        val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
+        val compressedFile = File.createTempFile(img+"_comp", ".$ext")
+        val outputStream = FileOutputStream(compressedFile)
+
+        if (sizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)) {
+            outputStream.close()
+            UCrop.of(Uri.fromFile(compressedFile),Uri.fromFile(File.createTempFile(img,".$ext")))
+                .withAspectRatio(1f, 1f)
+                .start(this)
+        } else {
+            UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
+                .withAspectRatio(1f, 1f)
+                .start(this)
+        }
+
         this.image = image
     }
 

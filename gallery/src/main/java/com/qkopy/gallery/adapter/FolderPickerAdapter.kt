@@ -1,6 +1,7 @@
 package com.qkopy.gallery.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -59,6 +60,11 @@ class FolderPickerAdapter(
 
     fun updateData(folder: Folder) {
         val index = folders.indexOf(folders.find { it.folderName.equals(folder.folderName) })
+        Log.e("INDEX:", index.toString())
+        if (index == -1) {
+            addData(folder)
+            return
+        }
         folders.set(index, folder)
         notifyItemChanged(index)
     }

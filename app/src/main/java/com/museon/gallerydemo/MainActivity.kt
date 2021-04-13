@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
             images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES)
             val imageFile = File(images[0].path)
             imageview.setImageURI(Uri.fromFile(imageFile))
-            val bitmap = BitmapFactory.decodeFile(imageFile.path)
+//            val bitmap = BitmapFactory.decodeFile(imageFile.path)
 //            val palette = Palette.from(bitmap).setRegion(0,0,bitmap.width/2,bitmap.height/2)
 //                .generate()
 //            val dark = palette.getDarkMutedColor(ContextCompat.getColor(this,R.color.black))

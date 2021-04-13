@@ -11,6 +11,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.database.ContentObserver
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -36,6 +38,7 @@ import com.qkopy.gallery.model.Image
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,7 +57,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     private lateinit var presenter: ImagePickerPresenter
     private val logger = LogHelper.instance
 
-    private var images:List<Image>? = null
+    private var images: List<Image>? = null
 
     private val imageClickListener = object : OnImageClickListener {
         override fun onImageClick(view: View, position: Int, isSelected: Boolean): Boolean {
@@ -288,29 +291,32 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             presenter.finishCaptureImage(this, data, config)
         }
 
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK){
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val outputUri = data?.let { UCrop.getOutput(it) }
             images?.let {
                 val c = it[0]
-                outputUri?.let {uri-> c.path = uri.path }
+                outputUri?.let { uri -> c.path = uri.path }
 
                 val list = ArrayList<Image>()
                 list.add(c)
                 val dataResult = Intent()
-                dataResult.putParcelableArrayListExtra(Config.EXTRA_IMAGES, list as ArrayList<out Parcelable>)
-                setResult(Activity.RESULT_OK,dataResult)
+                dataResult.putParcelableArrayListExtra(
+                    Config.EXTRA_IMAGES,
+                    list as ArrayList<out Parcelable>
+                )
+                setResult(Activity.RESULT_OK, dataResult)
                 finish()
             }
         }
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == UCrop.RESULT_ERROR){
-            Toast.makeText(this,"Crop Error",Toast.LENGTH_SHORT).show()
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == UCrop.RESULT_ERROR) {
+            Toast.makeText(this, "Crop Error", Toast.LENGTH_SHORT).show()
         }
 
-        if (requestCode == 1212 && resultCode == Activity.RESULT_OK){
+        if (requestCode == 1212 && resultCode == Activity.RESULT_OK) {
             val imgs = data?.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
             val data = Intent()
             data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, imgs as ArrayList<out Parcelable>)
-            setResult(Activity.RESULT_OK,data)
+            setResult(Activity.RESULT_OK, data)
             finish()
         }
     }
@@ -488,7 +494,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
 
 //        if (config.isMultipleMode==false && config.isCropEnabled == true){
-        if (config.isCropEnabled == true){
+        if (config.isCropEnabled == true) {
 
             if (config.isCropMandatory && images.size == 1) {
                 this.images = images
@@ -497,22 +503,52 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     val imgFile = File(image.path)
                     val img = image.name.split(".")[0]
                     val ext = image.name.split(".")[1]
+                    val opt = BitmapFactory.Options()
+                    opt.inJustDecodeBounds = true
+                    BitmapFactory.decodeFile(image.path, opt)
+                    val inSample = calculateInSampleSize(opt, 512, 512)
+                    opt.inSampleSize = inSample
+                    opt.inJustDecodeBounds = false
+                    val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
+                    val compressedFile = File.createTempFile(img+"_comp", ".$ext")
+                    val outputStream = FileOutputStream(compressedFile)
+
                     val options = UCrop.Options()
                     options.apply {
                         this.setHideBottomControls(true)
                     }
-                    UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
-                        .withAspectRatio(1f, 1f)
-                        .withOptions(options)
-                        .start(this)
+
+                    if (sizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)) {
+                        outputStream.close()
+                        UCrop.of(
+                            Uri.fromFile(compressedFile),
+                            Uri.fromFile(File.createTempFile(img, ".$ext"))
+                        )
+                            .withAspectRatio(1f, 1f)
+                            .withOptions(options)
+                            .start(this)
+                    } else {
+                        UCrop.of(
+                            Uri.fromFile(imgFile),
+                            Uri.fromFile(File.createTempFile(img, ".$ext"))
+                        )
+                            .withAspectRatio(1f, 1f)
+                            .withOptions(options)
+                            .start(this)
+                    }
+
+
                 }
 
             } else {
-                val intent = Intent(this,ImagePickerFinalActivity::class.java)
-                intent.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
+                val intent = Intent(this, ImagePickerFinalActivity::class.java)
+                intent.putParcelableArrayListExtra(
+                    Config.EXTRA_IMAGES,
+                    images as ArrayList<out Parcelable>
+                )
                 intent.putExtra(Config.EXTRA_CONFIG, config)
 
-                startActivityForResult(intent,1212)
+                startActivityForResult(intent, 1212)
             }
 
 
@@ -527,6 +563,26 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             finish()
         }
 
+    }
+
+    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        // Raw height and width of image
+        val (height: Int, width: Int) = options.run { outHeight to outWidth }
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
     }
 }
 
