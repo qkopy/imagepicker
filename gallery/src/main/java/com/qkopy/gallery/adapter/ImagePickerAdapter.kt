@@ -48,6 +48,7 @@ class ImagePickerAdapter(
                 RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
+                    .skipMemoryCache(true)
                     .centerCrop()
             )
             .into(viewHolder.image)
