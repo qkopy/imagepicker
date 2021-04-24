@@ -16,12 +16,13 @@ import java.util.*
 
 object ImageHelper {
     private val TAG = ImageHelper::class.java.simpleName
-    fun createImageFile(savePath: SavePath): File? {
+    fun createImageFile(context: Context,savePath: SavePath): File? {
         // External sdcard location
         val path: String = savePath.path
+
         val mediaStorageDir =
             if (savePath.isFullPath) File(path) else File(
-                Environment.getExternalStoragePublicDirectory(BuildConfig.STORAGE_PATH),
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 path
             )
 

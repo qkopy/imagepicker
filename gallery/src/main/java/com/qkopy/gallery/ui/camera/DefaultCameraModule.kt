@@ -18,7 +18,7 @@ class DefaultCameraModule : CameraModule, Serializable {
 
     override fun getCameraIntent(context: Context?, config: Config?): Intent? {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val imageFile: File = ImageHelper.createImageFile(config!!.savePath!!)!!
+        val imageFile: File = ImageHelper.createImageFile(context!!, config!!.savePath!!)!!
         if (imageFile != null) {
             val appContext = context!!.applicationContext
             val providerName = String.format(

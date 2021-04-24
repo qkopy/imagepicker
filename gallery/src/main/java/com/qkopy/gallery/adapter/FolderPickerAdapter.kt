@@ -60,7 +60,7 @@ class FolderPickerAdapter(
 
     fun updateData(folder: Folder) {
         val index = folders.indexOf(folders.find { it.folderName.equals(folder.folderName) })
-        Log.e("INDEX:", index.toString())
+        //Log.e("INDEX:", index.toString())
         if (index == -1) {
             addData(folder)
             return
@@ -70,7 +70,6 @@ class FolderPickerAdapter(
     }
 
     fun addData(folder: Folder) {
-
         this.folders.add(folder)
         notifyItemInserted(this.folders.size - 1)
 
