@@ -88,7 +88,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             return
         }
 
-        config = intent.getParcelableExtra(Config.EXTRA_CONFIG)
+        config = intent.getParcelableExtra(Config.EXTRA_CONFIG)!!
         if (config.isKeepScreenOn) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
@@ -191,7 +191,8 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
     private fun getDataWithPermission() {
 
-        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
 
         PermissionHelper.checkPermission(
             this,

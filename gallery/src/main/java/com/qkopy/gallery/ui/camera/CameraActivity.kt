@@ -37,7 +37,7 @@ class CameraActivty : AppCompatActivity(), CameraView {
             finish()
             return
         }
-        config = intent.getParcelableExtra(Config.EXTRA_CONFIG)
+        config = intent.getParcelableExtra(Config.EXTRA_CONFIG)!!
         if (config.isKeepScreenOn) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }

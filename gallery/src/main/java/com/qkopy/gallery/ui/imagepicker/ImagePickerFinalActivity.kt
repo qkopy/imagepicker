@@ -42,7 +42,7 @@ class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_picker_final)
-        config = intent.getParcelableExtra(Config.EXTRA_CONFIG)
+        config = intent.getParcelableExtra(Config.EXTRA_CONFIG)!!
         setupToolbar()
         val images = intent.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
         images?.let {
