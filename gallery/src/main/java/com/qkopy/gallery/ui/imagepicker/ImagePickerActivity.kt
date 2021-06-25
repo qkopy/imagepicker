@@ -19,10 +19,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Parcelable
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.qkopy.gallery.R
 import com.qkopy.gallery.helper.CameraHelper
@@ -191,14 +193,17 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
     private fun getDataWithPermission() {
 
-        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE)
+        val permissions = arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
 
         PermissionHelper.checkPermission(
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             object : PermissionHelper.PermissionAskListener {
                 override fun onNeedPermission() {
+                    Log.d("PERM", "onNeedPermission()")
                     PermissionHelper.requestAllPermissions(
                         this@ImagePickerActivity,
                         permissions,
@@ -207,25 +212,35 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionPreviouslyDenied() {
-                    PermissionHelper.requestAllPermissions(
-                        this@ImagePickerActivity,
-                        permissions,
-                        Config.RC_WRITE_EXTERNAL_STORAGE_PERMISSION
-                    )
+                    Log.d("PERM", "onPermissionPreviouslyDenied()")
+                    AlertDialog.Builder(this@ImagePickerActivity).apply {
+                        setTitle("Allow Permission")
+                        setMessage("Please allow File Access Permission to proceed")
+                        setPositiveButton("Ok") { dialog, which ->
+                            PermissionHelper.requestAllPermissions(
+                                this@ImagePickerActivity,
+                                permissions,
+                                Config.RC_WRITE_EXTERNAL_STORAGE_PERMISSION
+                            )
+                            dialog?.dismiss()
+                        }
+                    }.create().show()
+
                 }
 
                 override fun onPermissionDisabled() {
-                    snackbar.show(R.string.msg_no_write_external_storage_permission,
-                        object : View.OnClickListener {
-                            override fun onClick(v: View?) {
+                    Log.d("GPERM", "onPermissionDisabled()")
+                    snackbar
+                        .show(R.string.msg_no_write_external_storage_permission,
+                            View.OnClickListener {
                                 PermissionHelper.openAppSettings(
                                     this@ImagePickerActivity
                                 )
-                            }
-                        })
+                            })
                 }
 
                 override fun onPermissionGranted() {
+                    Log.d("PERM", "onPermissionGranted()")
                     getData()
                 }
             })
@@ -254,11 +269,21 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionPreviouslyDenied() {
-                    PermissionHelper.requestAllPermissions(
-                        this@ImagePickerActivity,
-                        permissions,
-                        Config.RC_CAMERA_PERMISSION
-                    )
+
+                    AlertDialog.Builder(this@ImagePickerActivity).apply {
+                        setTitle("Allow Permission")
+                        setMessage("Please allow Camera Access Permission to proceed")
+                        setPositiveButton("Ok") { dialog, which ->
+                            PermissionHelper.requestAllPermissions(
+                                this@ImagePickerActivity,
+                                permissions,
+                                Config.RC_CAMERA_PERMISSION
+                            )
+                            dialog?.dismiss()
+                        }
+                    }.create().show()
+
+
                 }
 
                 override fun onPermissionDisabled() {
@@ -511,7 +536,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     opt.inSampleSize = inSample
                     opt.inJustDecodeBounds = false
                     val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
-                    val compressedFile = File.createTempFile(img+"_comp", ".$ext")
+                    val compressedFile = File.createTempFile(img + "_comp", ".$ext")
                     val outputStream = FileOutputStream(compressedFile)
 
                     val options = UCrop.Options()
