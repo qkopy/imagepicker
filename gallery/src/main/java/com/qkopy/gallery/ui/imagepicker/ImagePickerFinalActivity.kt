@@ -142,17 +142,18 @@ class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListe
         val opt = BitmapFactory.Options()
         opt.inJustDecodeBounds = true
         BitmapFactory.decodeFile(image.path, opt)
-        val inSample = calculateInSampleSize(opt, 512, 512)
+        val inSample = calculateInSampleSize(opt, 1536, 1536)
         opt.inSampleSize = inSample
         opt.inJustDecodeBounds = false
         val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
         val compressedFile = File.createTempFile(img+"_comp", ".$ext")
         val outputStream = FileOutputStream(compressedFile)
 
-        if (sizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)) {
+        if (sizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)) {
             outputStream.close()
             UCrop.of(Uri.fromFile(compressedFile),Uri.fromFile(File.createTempFile(img,".$ext")))
                 .withAspectRatio(1f, 1f)
+                .withOptions(UCrop.Options().apply { setCompressionQuality(100) })
                 .start(this)
         } else {
             UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))

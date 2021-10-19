@@ -1,7 +1,6 @@
 package com.qkopy.gallery.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -33,8 +32,10 @@ class FolderPickerAdapter(
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
         val folder = folders[position]
+        val firstImagePath =
+            if (folder.images?.isNotEmpty() == true) folder.images!![0].path else ""
         Glide.with(context)
-            .load(folder.images!![0].path)
+            .load(firstImagePath)
             .transition(DrawableTransitionOptions.withCrossFade())
             .apply(
                 RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)

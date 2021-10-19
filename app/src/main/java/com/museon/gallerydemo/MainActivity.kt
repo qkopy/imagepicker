@@ -3,7 +3,6 @@ package com.museon.gallerydemo
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -50,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             .setShowCamera(true)
             .setMultipleMode(false)
             .setIsCropEnabled(true)
+            //.setIsCropMandatory(true)
             .setSelectedImages(images)
             .setMaxSize(selectImageCount)
             .setBackgroundColor("#212121")
@@ -104,7 +104,9 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         // image picker
         if (requestCode == Config.RC_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
-            images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES)
+            images =
+                data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
+                    ?: arrayListOf()
             val imageFile = File(images[0].path)
             imageview.setImageURI(Uri.fromFile(imageFile))
 //            val bitmap = BitmapFactory.decodeFile(imageFile.path)

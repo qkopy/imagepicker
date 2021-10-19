@@ -283,7 +283,6 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                         }
                     }.create().show()
 
-
                 }
 
                 override fun onPermissionDisabled() {
@@ -532,22 +531,27 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     val opt = BitmapFactory.Options()
                     opt.inJustDecodeBounds = true
                     BitmapFactory.decodeFile(image.path, opt)
-                    val inSample = calculateInSampleSize(opt, 512, 512)
+                    val inSample = calculateInSampleSize(opt, 1536, 1536)
                     opt.inSampleSize = inSample
                     opt.inJustDecodeBounds = false
                     val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
                     val compressedFile = File.createTempFile(img + "_comp", ".$ext")
                     val outputStream = FileOutputStream(compressedFile)
+                    //imgFile.copyTo(compressedFile,true)
 
                     val options = UCrop.Options()
                     options.apply {
-                        this.setHideBottomControls(true)
+                        //setHideBottomControls(true)
+                            //setMaxBitmapSize(1536)
+                        //setCompressionFormat(Bitmap.CompressFormat.PNG)
+                        setCompressionQuality(100)
+                        //withAspectRatio(16f,9f)
                     }
 
-                    if (sizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)) {
+                    if (sizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
                         outputStream.close()
                         UCrop.of(
-                            Uri.fromFile(compressedFile),
+                           Uri.fromFile(compressedFile),
                             Uri.fromFile(File.createTempFile(img, ".$ext"))
                         )
                             .withAspectRatio(1f, 1f)
@@ -559,6 +563,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                             Uri.fromFile(File.createTempFile(img, ".$ext"))
                         )
                             .withAspectRatio(1f, 1f)
+                            //.useSourceImageAspectRatio()
                             .withOptions(options)
                             .start(this)
                     }
