@@ -526,8 +526,9 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 images?.let {
                     val image = it[0]
                     val imgFile = File(image.path)
-                    val img = image.name.split(".")[0]
-                    val ext = image.name.split(".")[1]
+
+                    val img = imgFile.nameWithoutExtension//image.name.split(".")[0]
+                    val ext = imgFile.extension//image.name.split(".")[1]
                     val opt = BitmapFactory.Options()
                     opt.inJustDecodeBounds = true
                     BitmapFactory.decodeFile(image.path, opt)
