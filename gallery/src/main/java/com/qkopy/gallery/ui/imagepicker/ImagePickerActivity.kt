@@ -527,8 +527,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     val image = it[0]
                     val imgFile = File(image.path)
 
-                    val img = imgFile.nameWithoutExtension//image.name.split(".")[0]
-                    val ext = imgFile.extension//image.name.split(".")[1]
+                    val img =
+                        if (imgFile.nameWithoutExtension.isNotEmpty()) imgFile.nameWithoutExtension
+                        else System.currentTimeMillis().toString()
+                    val ext = if (imgFile.extension.isNotEmpty()) imgFile.extension
+                    else "jpg"
                     val opt = BitmapFactory.Options()
                     opt.inJustDecodeBounds = true
                     BitmapFactory.decodeFile(image.path, opt)
@@ -543,7 +546,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     val options = UCrop.Options()
                     options.apply {
                         //setHideBottomControls(true)
-                            //setMaxBitmapSize(1536)
+                        //setMaxBitmapSize(1536)
                         //setCompressionFormat(Bitmap.CompressFormat.PNG)
                         setCompressionQuality(100)
                         //withAspectRatio(16f,9f)
@@ -552,7 +555,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     if (sizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
                         outputStream.close()
                         UCrop.of(
-                           Uri.fromFile(compressedFile),
+                            Uri.fromFile(compressedFile),
                             Uri.fromFile(File.createTempFile(img, ".$ext"))
                         )
                             .withAspectRatio(1f, 1f)
