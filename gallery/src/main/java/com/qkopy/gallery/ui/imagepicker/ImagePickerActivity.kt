@@ -317,19 +317,24 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         }
 
         if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val outputUri = data?.let { UCrop.getOutput(it) }
-            images?.let {
-                val c = it[0]
-                outputUri?.let { uri -> c.path = uri.path }
+            if (data != null) {
+                val outputUri = UCrop.getOutput(data)
+                images?.let {
+                    val c = it[0]
+                    outputUri?.let { uri -> c.path = uri.path }
 
-                val list = ArrayList<Image>()
-                list.add(c)
-                val dataResult = Intent()
-                dataResult.putParcelableArrayListExtra(
-                    Config.EXTRA_IMAGES,
-                    list as ArrayList<out Parcelable>
-                )
-                setResult(Activity.RESULT_OK, dataResult)
+                    val list = ArrayList<Image>()
+                    list.add(c)
+                    val dataResult = Intent()
+                    dataResult.putParcelableArrayListExtra(
+                        Config.EXTRA_IMAGES,
+                        list as ArrayList<out Parcelable>
+                    )
+                    setResult(Activity.RESULT_OK, dataResult)
+                    finish()
+                }
+            } else {
+                setResult(Activity.RESULT_CANCELED)
                 finish()
             }
         }

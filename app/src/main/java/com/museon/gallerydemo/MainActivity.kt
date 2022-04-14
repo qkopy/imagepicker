@@ -99,15 +99,41 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun createFile() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "image/*"
+            putExtra(Intent.EXTRA_TITLE, "img.jpg")
+
+            // Optionally, specify a URI for the directory that should be opened in
+            // the system file picker before your app creates the document.
+            //putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+        }
+        startActivityForResult(intent, 112)
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 112 && resultCode == Activity.RESULT_OK) {
+            data?.data?.also { uri ->
+                val f = File(images[0].path)
+                val dat = f.bufferedReader()
+                val out = contentResolver.openOutputStream(uri)
+
+                out?.bufferedWriter()?.let { dat.copyTo(it) }
+                out?.close()
+
+            }
+        }
         // image picker
         if (requestCode == Config.RC_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
             images =
                 data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
                     ?: arrayListOf()
             val imageFile = File(images[0].path)
+            createFile()
             imageview.setImageURI(Uri.fromFile(imageFile))
 //            val bitmap = BitmapFactory.decodeFile(imageFile.path)
 //            val palette = Palette.from(bitmap).setRegion(0,0,bitmap.width/2,bitmap.height/2)
