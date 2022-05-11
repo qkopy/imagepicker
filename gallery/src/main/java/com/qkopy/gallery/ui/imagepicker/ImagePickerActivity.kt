@@ -42,7 +42,6 @@ import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
@@ -528,12 +527,13 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
             if (config.isCropMandatory && images.size == 1) {
                 this.images = images
+
                 images?.let {
                     val image = it[0]
                     val imgFile = File(image.path)
 
                     val img =
-                        if (imgFile.nameWithoutExtension.isNotEmpty()) imgFile.nameWithoutExtension
+                        if (imgFile.nameWithoutExtension.isNotEmpty() && imgFile.nameWithoutExtension.length >= 3) imgFile.nameWithoutExtension
                         else System.currentTimeMillis().toString()
                     val ext = if (imgFile.extension.isNotEmpty()) imgFile.extension
                     else "jpg"
