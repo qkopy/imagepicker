@@ -157,6 +157,7 @@ class Config : Parcelable {
         const val RC_WRITE_EXTERNAL_STORAGE_PERMISSION = 102
         const val RC_CAMERA_PERMISSION = 103
         const val MAX_SIZE = Int.MAX_VALUE
+        const val RESULT_PICK_ERROR = 104
 
         @JvmField
         val CREATOR: Parcelable.Creator<Config?> =
