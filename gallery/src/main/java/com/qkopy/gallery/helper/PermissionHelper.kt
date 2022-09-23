@@ -67,6 +67,15 @@ object PermissionHelper {
         return true
     }
 
+    fun hasGrantedAny(grantResults: IntArray): Boolean {
+        for (result in grantResults) {
+            if (hasGranted(result)) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun hasSelfPermission(
         context: Context,
         permission: String?

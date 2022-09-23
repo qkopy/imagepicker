@@ -41,7 +41,6 @@ import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
 
 
 class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
@@ -362,7 +361,12 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         when (requestCode) {
             Config.RC_WRITE_EXTERNAL_STORAGE_PERMISSION -> {
                 run {
-                    if (PermissionHelper.hasGranted(grantResults)) {
+                    if (PermissionHelper.hasGranted(grantResults) || (
+                                Build.VERSION.SDK_INT > Build.VERSION_CODES.P && PermissionHelper.hasGrantedAny(
+                                    grantResults
+                                )
+                                )
+                    ) {
                         if (logger != null) {
                             logger.d("Write External permission granted")
                         }
@@ -372,7 +376,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                     if (logger != null) {
                         logger.e(
                             "Permission not granted: results len = " + grantResults.size +
-                                    " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)"
+                                    " Result code = " + if (grantResults.isNotEmpty()) grantResults.joinToString() else "(empty)"
                         )
                     }
                     finish()
@@ -521,78 +525,81 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     override fun finishPickImages(images: List<Image>?) {
-       if (images != null) {
-           val data = Intent()
-           data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images as ArrayList<out Parcelable>)
+        if (images != null) {
+            val data = Intent()
+            data.putParcelableArrayListExtra(
+                Config.EXTRA_IMAGES,
+                images as ArrayList<out Parcelable>
+            )
 
 //        if (config.isMultipleMode==false && config.isCropEnabled == true){
-           if (config.isCropEnabled == true) {
+            if (config.isCropEnabled == true) {
 
-               if (config.isCropMandatory && images.size == 1) {
-                   this.images = images
+                if (config.isCropMandatory && images.size == 1) {
+                    this.images = images
 
-                   images?.let {
-                       val image = it[0]
-                       val imgFile = File(image.path)
+                    images?.let {
+                        val image = it[0]
+                        val imgFile = File(image.path)
 
-                       val img =
-                           if (imgFile.nameWithoutExtension.isNotEmpty() && imgFile.nameWithoutExtension.length >= 3) imgFile.nameWithoutExtension
-                           else System.currentTimeMillis().toString()
-                       val ext = if (imgFile.extension.isNotEmpty()) imgFile.extension
-                       else "jpg"
-                       val opt = BitmapFactory.Options()
-                       opt.inJustDecodeBounds = true
-                       BitmapFactory.decodeFile(image.path, opt)
-                       val inSample = calculateInSampleSize(opt, 1536, 1536)
-                       opt.inSampleSize = inSample
-                       opt.inJustDecodeBounds = false
-                       val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
-                       val compressedFile = File.createTempFile(img + "_comp", ".$ext")
-                       val outputStream = FileOutputStream(compressedFile)
-                       //imgFile.copyTo(compressedFile,true)
+                        val img =
+                            if (imgFile.nameWithoutExtension.isNotEmpty() && imgFile.nameWithoutExtension.length >= 3) imgFile.nameWithoutExtension
+                            else System.currentTimeMillis().toString()
+                        val ext = if (imgFile.extension.isNotEmpty()) imgFile.extension
+                        else "jpg"
+                        val opt = BitmapFactory.Options()
+                        opt.inJustDecodeBounds = true
+                        BitmapFactory.decodeFile(image.path, opt)
+                        val inSample = calculateInSampleSize(opt, 1536, 1536)
+                        opt.inSampleSize = inSample
+                        opt.inJustDecodeBounds = false
+                        val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
+                        val compressedFile = File.createTempFile(img + "_comp", ".$ext")
+                        val outputStream = FileOutputStream(compressedFile)
+                        //imgFile.copyTo(compressedFile,true)
 
-                       val options = UCrop.Options()
-                       options.apply {
-                           //setHideBottomControls(true)
-                           //setMaxBitmapSize(1536)
-                           //setCompressionFormat(Bitmap.CompressFormat.PNG)
-                           setCompressionQuality(100)
-                           //withAspectRatio(16f,9f)
-                       }
+                        val options = UCrop.Options()
+                        options.apply {
+                            //setHideBottomControls(true)
+                            //setMaxBitmapSize(1536)
+                            //setCompressionFormat(Bitmap.CompressFormat.PNG)
+                            setCompressionQuality(100)
+                            //withAspectRatio(16f,9f)
+                        }
 
-                       if (sizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
-                           outputStream.close()
-                           UCrop.of(
-                               Uri.fromFile(compressedFile),
-                               Uri.fromFile(File.createTempFile(img, ".$ext"))
-                           )
-                               .withAspectRatio(1f, 1f)
-                               .withOptions(options)
-                               .start(this)
-                       } else {
-                           UCrop.of(
-                               Uri.fromFile(imgFile),
-                               Uri.fromFile(File.createTempFile(img, ".$ext"))
-                           )
-                               .withAspectRatio(1f, 1f)
-                               //.useSourceImageAspectRatio()
-                               .withOptions(options)
-                               .start(this)
-                       }
+                        if (sizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
+                            outputStream.close()
+                            UCrop.of(
+                                Uri.fromFile(compressedFile),
+                                Uri.fromFile(File.createTempFile(img, ".$ext"))
+                            )
+                                .withAspectRatio(1f, 1f)
+                                .withOptions(options)
+                                .start(this)
+                        } else {
+                            UCrop.of(
+                                Uri.fromFile(imgFile),
+                                Uri.fromFile(File.createTempFile(img, ".$ext"))
+                            )
+                                .withAspectRatio(1f, 1f)
+                                //.useSourceImageAspectRatio()
+                                .withOptions(options)
+                                .start(this)
+                        }
 
 
-                   }
+                    }
 
-               } else {
-                   val intent = Intent(this, ImagePickerFinalActivity::class.java)
-                   intent.putParcelableArrayListExtra(
-                       Config.EXTRA_IMAGES,
-                       images as ArrayList<out Parcelable>
-                   )
-                   intent.putExtra(Config.EXTRA_CONFIG, config)
+                } else {
+                    val intent = Intent(this, ImagePickerFinalActivity::class.java)
+                    intent.putParcelableArrayListExtra(
+                        Config.EXTRA_IMAGES,
+                        images as ArrayList<out Parcelable>
+                    )
+                    intent.putExtra(Config.EXTRA_CONFIG, config)
 
-                   startActivityForResult(intent, 1212)
-               }
+                    startActivityForResult(intent, 1212)
+                }
 
 
 //            this.images = images
@@ -601,14 +608,14 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 //            UCrop.of(Uri.fromFile(File(images[0].path)), Uri.fromFile(File.createTempFile(img,".$ext")))
 //                .withAspectRatio(1f,1f)
 //                .start(this)
-           } else {
-               setResult(Activity.RESULT_OK, data)
-               finish()
-           }
-       } else {
-           setResult(Config.RESULT_PICK_ERROR)
-           finish()
-       }
+            } else {
+                setResult(Activity.RESULT_OK, data)
+                finish()
+            }
+        } else {
+            setResult(Config.RESULT_PICK_ERROR)
+            finish()
+        }
 
     }
 
