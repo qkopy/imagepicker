@@ -3,9 +3,14 @@ package com.museon.gallerydemo
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
@@ -30,6 +35,22 @@ class MainActivity : AppCompatActivity() {
 
         btnTest.setOnClickListener {
             openImagePicker()
+        }
+        btn_test.setOnClickListener {
+            ImagePicker.with(this)
+                .setFolderMode(true)
+                .setCameraOnly(false)
+                .setFolderTitle("album")
+                .setShowCamera(true)
+                .setMultipleMode(false)
+                .setIsCropEnabled(false)
+                //.setIsCropMandatory(true)
+                .setMaxSize(1)
+                .setBackgroundColor("#212121")
+                .setAlwaysShowDoneButton(false)
+                .setRequestCode(987)
+                .setKeepScreenOn(true)
+                .start()
         }
     }
 
@@ -152,5 +173,73 @@ class MainActivity : AppCompatActivity() {
             }
             //adapter!!.setData(images)
         }
+
+        if (requestCode == 987&& resultCode == Activity.RESULT_OK && data != null) {
+            images =
+                data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
+                    ?: arrayListOf()
+           // val imageFile = File(images[0].path)
+           // createFile()
+            val opt = BitmapFactory.Options()
+            opt.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(images[0].path, opt)
+            val inSample = calculateInSampleSize(opt, 300, 300)
+            opt.inSampleSize = inSample
+            opt.inJustDecodeBounds = false
+            val bmap = BitmapFactory.decodeFile(images[0].path, opt)
+            Log.d("BMAP::","${bmap?.width}x${bmap?.height}")
+            //val tempFile = File.createTempFile("test"+"_comp", ".jpg")
+
+            val view = RelativeLayout(this)
+            val mInflater = LayoutInflater.from(this)
+            mInflater.inflate(R.layout.test_img_ayout, view, true)
+            view.layoutParams = RelativeLayout.LayoutParams(
+                300,
+                300
+            )
+
+            //Pre-measure the view so that height and width don't remain null.
+            view.measure(view.layoutParams.width, view.layoutParams.height)
+            view.findViewById<ImageView>(R.id.img).setImageURI(Uri.fromFile(File(images[0].path)))
+            //Assign a size and position to the view and all of its descendants
+
+            //Assign a size and position to the view and all of its descendants
+            view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+            val bmapN = getBitmapFromView(view)
+            imageview.setImageBitmap(bmapN)
+            Log.d("BMAPN::","${bmapN?.width}x${bmapN?.height}")
+
+        }
+    }
+
+    fun getBitmapFromView(view: View): Bitmap? {
+        //Create the bitmap
+        val bitmap =
+            Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
+        //Create a canvas with the specified bitmap to draw into
+        val c = Canvas(bitmap)
+        //Render this view (and all of its children) to the given Canvas
+        view.draw(c)
+        return bitmap
+    }
+
+    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        // Raw height and width of image
+        val (height: Int, width: Int) = options.run { outHeight to outWidth }
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
     }
 }

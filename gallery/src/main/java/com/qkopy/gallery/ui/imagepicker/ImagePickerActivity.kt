@@ -191,7 +191,6 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
 
     private fun getDataWithPermission() {
-
         val permissions = arrayOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
@@ -199,7 +198,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
         PermissionHelper.checkPermission(
             this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
             object : PermissionHelper.PermissionAskListener {
                 override fun onNeedPermission() {
                     Log.d("PERM", "onNeedPermission()")
