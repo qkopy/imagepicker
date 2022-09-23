@@ -47,6 +47,7 @@ class SnackBarView : RelativeLayout {
         setBackgroundColor(Color.parseColor("#323232"))
         translationY = height.toFloat()
         alpha = 0f
+        visibility = View.GONE
         isShowing = false
         val horizontalPadding = convertDpToPixels(context, 24f)
         val verticalPadding = convertDpToPixels(context, 14f)
@@ -70,6 +71,7 @@ class SnackBarView : RelativeLayout {
     fun show(textResId: Int, onClickListener: OnClickListener) {
         setText(textResId)
         setOnActionClickListener(context.getString(R.string.action_ok), onClickListener)
+        visibility = View.VISIBLE
         ViewCompat.animate(this)
             .translationY(0f)
             .setDuration(ANIM_DURATION.toLong())
@@ -84,6 +86,7 @@ class SnackBarView : RelativeLayout {
             .setDuration(ANIM_DURATION.toLong())
             .alpha(0.5f)
             .withEndAction(runnable)
+        visibility = View.GONE
         isShowing = false
     }
 
