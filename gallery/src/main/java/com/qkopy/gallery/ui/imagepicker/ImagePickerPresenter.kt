@@ -98,6 +98,21 @@ class ImagePickerPresenter(private val imageLoader: ImageFileLoader) :
         activity.startActivityForResult(intent, requestCode)
     }
 
+    fun getCaptureImageIntent(activity: Activity,
+                              config: Config?) : Intent?{
+        val context = activity.applicationContext
+        val intent = cameraModule.getCameraIntent(activity, config)
+        if (intent == null) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.error_create_image_file),
+                Toast.LENGTH_LONG
+            ).show()
+            return null
+        }
+        return intent
+    }
+
     fun finishCaptureImage(
         context: Context?,
         data: Intent?,

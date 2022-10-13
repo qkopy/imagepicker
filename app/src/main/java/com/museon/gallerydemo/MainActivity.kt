@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
@@ -21,6 +23,20 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
 
     private var images = ArrayList<Image>()
+
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+            images =
+                it.data!!.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
+                    ?: arrayListOf()
+            val imageFile = File(images[0].path)
+            //createFile()
+            imageview.setImageURI(Uri.fromFile(imageFile))
+            images.forEach {
+                Log.d("Image:", it.path)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             selectImageCount = 1
         }
 
-        ImagePicker.with(this)
+        val pickerIntent = ImagePicker.with(this)
             .setFolderMode(true)
             .setCameraOnly(false)
             .setFolderTitle("album")
@@ -77,13 +93,15 @@ class MainActivity : AppCompatActivity() {
             .setAlwaysShowDoneButton(false)
             .setRequestCode(100)
             .setKeepScreenOn(true)
-            .start()
+            .intent
+            //.start()
+        imagePickerLauncher.launch(pickerIntent)
     }
 
     private fun startFoldersList() {
 
 
-        ImagePicker.with(this)
+        val pickerIntent = ImagePicker.with(this)
             .setFolderMode(true)
             .setCameraOnly(false)
             .setFolderTitle("Album")
@@ -97,14 +115,16 @@ class MainActivity : AppCompatActivity() {
             .setAlwaysShowDoneButton(false)
             .setRequestCode(100)
             .setKeepScreenOn(true)
-            .start()
+            .intent
+           // .start()
+        imagePickerLauncher.launch(pickerIntent)
 
     }
 
     private fun startImagesList() {
 
 
-        ImagePicker.with(this)
+        val pickerIntent = ImagePicker.with(this)
             .setFolderMode(false)
             .setCameraOnly(false)
             .setFolderTitle("Album")
@@ -116,7 +136,9 @@ class MainActivity : AppCompatActivity() {
             .setAlwaysShowDoneButton(false)
             .setRequestCode(100)
             .setKeepScreenOn(true)
-            .start()
+            .intent
+           // .start()
+        imagePickerLauncher.launch(pickerIntent)
 
     }
 

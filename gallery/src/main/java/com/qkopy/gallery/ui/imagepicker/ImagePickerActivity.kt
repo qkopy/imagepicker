@@ -23,6 +23,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -304,16 +305,23 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         if (!CameraHelper.checkCameraAvailability(this)) {
             return
         }
-        presenter.captureImage(this, config, Config.RC_CAPTURE_IMAGE)
+        //presenter.captureImage(this, config, Config.RC_CAPTURE_IMAGE)
+        captureImageResultLauncher.launch(
+            presenter.getCaptureImageIntent(this, config)
+        )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Config.RC_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
-            presenter.finishCaptureImage(this, data, config)
+    private val captureImageResultLauncher =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                presenter.finishCaptureImage(this, result.data, config)
+            }
+
         }
 
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+    private val cropResultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
             if (data != null) {
                 val outputUri = UCrop.getOutput(data)
                 if (images != null && images!!.isNotEmpty()) {
@@ -337,19 +345,30 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 setResult(Config.RESULT_PICK_ERROR)
                 finish()
             }
-        }
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == UCrop.RESULT_ERROR) {
+        } else {
             Toast.makeText(this, "Crop Error", Toast.LENGTH_SHORT).show()
         }
 
-        if (requestCode == 1212 && resultCode == Activity.RESULT_OK) {
-            val imgs = data?.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
-            val data = Intent()
-            data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, imgs as ArrayList<out Parcelable>)
-            setResult(Activity.RESULT_OK, data)
-            finish()
-        }
     }
+
+    private val cropMultipleResultLauncher =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val imgs =
+                    result.data?.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
+
+
+
+                val data = Intent()
+                data.putParcelableArrayListExtra(
+                    Config.EXTRA_IMAGES,
+                    imgs as ArrayList<out Parcelable>
+                )
+                setResult(Activity.RESULT_OK, data)
+                finish()
+            }
+
+        }
 
 
     override fun onRequestPermissionsResult(
@@ -533,12 +552,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
             )
 
 //        if (config.isMultipleMode==false && config.isCropEnabled == true){
-            if (config.isCropEnabled == true) {
+            if (config.isCropEnabled) {
 
                 if (config.isCropMandatory && images.size == 1) {
                     this.images = images
-
-                    images?.let {
+                    this.images?.let {
                         val image = it[0]
                         val imgFile = File(image.path)
 
@@ -567,24 +585,29 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                             //withAspectRatio(16f,9f)
                         }
 
+
                         if (sizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
                             outputStream.close()
-                            UCrop.of(
+                            val cropIntent = UCrop.of(
                                 Uri.fromFile(compressedFile),
                                 Uri.fromFile(File.createTempFile(img, ".$ext"))
                             )
                                 .withAspectRatio(1f, 1f)
                                 .withOptions(options)
-                                .start(this)
+                                .getIntent(this)
+                            //.start(this)
+                            cropResultLauncher.launch(cropIntent)
                         } else {
-                            UCrop.of(
+                            val cropIntent = UCrop.of(
                                 Uri.fromFile(imgFile),
                                 Uri.fromFile(File.createTempFile(img, ".$ext"))
                             )
                                 .withAspectRatio(1f, 1f)
                                 //.useSourceImageAspectRatio()
                                 .withOptions(options)
-                                .start(this)
+                                .getIntent(this)
+                            //.start(this)
+                            cropResultLauncher.launch(cropIntent)
                         }
 
 
@@ -597,8 +620,8 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                         images as ArrayList<out Parcelable>
                     )
                     intent.putExtra(Config.EXTRA_CONFIG, config)
-
-                    startActivityForResult(intent, 1212)
+                    cropMultipleResultLauncher.launch(intent)
+                    //startActivityForResult(intent, 1212)
                 }
 
 
@@ -619,7 +642,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
     }
 
-    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
         // Raw height and width of image
         val (height: Int, width: Int) = options.run { outHeight to outWidth }
         var inSampleSize = 1

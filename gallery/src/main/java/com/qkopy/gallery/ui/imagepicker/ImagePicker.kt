@@ -15,7 +15,7 @@ class ImagePicker(builder: Builder) {
 
     internal class ActivityBuilder(private val activity: Activity) : Builder(activity) {
         override fun start() {
-            val intent = intent!!
+            val intent = intent
             val requestCode: Int =
                 if (config.requestCode !== 0) config.requestCode else Config.RC_PICK_IMAGES
             if (!config.isCameraOnly) {
@@ -26,7 +26,7 @@ class ImagePicker(builder: Builder) {
             }
         }
 
-        override val intent: Intent?
+        override val intent: Intent
             get() {
                 val intent: Intent
                 if (!config.isCameraOnly) {
@@ -51,7 +51,7 @@ class ImagePicker(builder: Builder) {
             if (!config.isCameraOnly) {
                 fragment.startActivityForResult(intent, requestCode)
             } else {
-                fragment.activity!!.overridePendingTransition(0, 0)
+                fragment.requireActivity().overridePendingTransition(0, 0)
                 fragment.startActivityForResult(intent, requestCode)
             }
         }

@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -29,6 +30,20 @@ class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListe
     lateinit var imageCropAdapter: ImageCropAdapter
     private val doneClickListener = View.OnClickListener { onDone() }
     private lateinit var config: Config
+
+    private val cropResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val outputUri = result.data?.let { UCrop.getOutput(it) }
+
+                image?.let {
+                    outputUri?.let { uri -> it.path = uri.path }
+                    imageCropAdapter.updateItem(it)
+
+                }
+            }
+        }
+
     private fun onDone() {
         val data = Intent()
         data.putParcelableArrayListExtra(
@@ -121,19 +136,6 @@ class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListe
         recyclerViewImages.smoothScrollToPosition(llayout.findFirstVisibleItemPosition() - 1)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val outputUri = data?.let { UCrop.getOutput(it) }
-
-            image?.let {
-                outputUri?.let { uri -> it.path = uri.path }
-                imageCropAdapter.updateItem(it)
-
-            }
-        }
-    }
-
     override fun onClickCrop(image: Image) {
         val imgFile = File(image.path)
         val img = image.name.split(".")[0]
@@ -146,19 +148,23 @@ class ImagePickerFinalActivity : AppCompatActivity(), ImageCropAdapter.CropListe
         opt.inSampleSize = inSample
         opt.inJustDecodeBounds = false
         val sizedBitmap = BitmapFactory.decodeFile(image.path, opt)
-        val compressedFile = File.createTempFile(img+"_comp", ".$ext")
+        val compressedFile = File.createTempFile(img + "_comp", ".$ext")
         val outputStream = FileOutputStream(compressedFile)
 
         if (sizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)) {
             outputStream.close()
-            UCrop.of(Uri.fromFile(compressedFile),Uri.fromFile(File.createTempFile(img,".$ext")))
+            val cropIntent = UCrop.of(Uri.fromFile(compressedFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
                 .withAspectRatio(1f, 1f)
                 .withOptions(UCrop.Options().apply { setCompressionQuality(100) })
-                .start(this)
+                .getIntent(this)
+                //.start(this)
+            cropResultLauncher.launch(cropIntent)
         } else {
-            UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
+            val cropIntent =UCrop.of(Uri.fromFile(imgFile), Uri.fromFile(File.createTempFile(img, ".$ext")))
                 .withAspectRatio(1f, 1f)
-                .start(this)
+                .getIntent(this)
+                //.start(this)
+            cropResultLauncher.launch(cropIntent)
         }
 
         this.image = image
