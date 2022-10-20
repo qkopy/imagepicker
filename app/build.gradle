@@ -22,11 +22,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    buildFeatures {
+        viewBinding = true
+    }
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+    namespace 'com.museon.gallerydemo'
 }
 
 dependencies {

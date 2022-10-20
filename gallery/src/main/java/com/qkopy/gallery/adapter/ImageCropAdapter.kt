@@ -8,16 +8,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.qkopy.gallery.R
+import com.qkopy.gallery.databinding.ImagepickerLayoutRecyclerviewItemCropBinding
 import com.qkopy.gallery.model.Image
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.imagepicker_layout_recyclerview_item_crop.view.*
 import java.io.File
 
 class ImageCropAdapter(val activity: Activity,val images:ArrayList<Image>, val listener:CropListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.imagepicker_layout_recyclerview_item_crop,parent,false)
-
+       val view =  ImagepickerLayoutRecyclerviewItemCropBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
+        ).root
         return ImageCropHolder(view)
 
     }
@@ -50,7 +51,7 @@ class ImageCropAdapter(val activity: Activity,val images:ArrayList<Image>, val l
     }
 
     class ImageCropHolder(itemView:View) : RecyclerView.ViewHolder(itemView){
-
+        private val binding = ImagepickerLayoutRecyclerviewItemCropBinding.bind(itemView)
         fun bind(image: Image,activity: Activity,listener: CropListener){
 
 //            itemView.imgCrop.setImageUri(
@@ -61,11 +62,11 @@ class ImageCropAdapter(val activity: Activity,val images:ArrayList<Image>, val l
           //  itemView.imgCrop.setImageURI(Uri.fromFile(imgFile))
             Glide.with(activity)
                 .load(imgFile)
-                .into(itemView.imgCrop)
-            itemView.btnCrop.setOnClickListener {
+                .into(binding.imgCrop)
+            binding.btnCrop.setOnClickListener {
                 listener.onClickCrop(image)
             }
-            itemView.btnClose.setOnClickListener{
+            binding.btnClose.setOnClickListener{
                 listener.onClickClose(image)
             }
         }

@@ -12,12 +12,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.qkopy.gallery.R
+import com.qkopy.gallery.databinding.ImagepickerItemImageBinding
 import com.qkopy.gallery.helper.ImageHelper
 import com.qkopy.gallery.listener.OnImageClickListener
 import com.qkopy.gallery.listener.OnImageSelectionListener
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter
-import kotlinx.android.synthetic.main.imagepicker_item_image.view.*
 import java.util.*
 
 
@@ -34,7 +34,8 @@ class ImagePickerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val itemView: View =
-            inflater.inflate(R.layout.imagepicker_item_image, parent, false)
+            // inflater.inflate(R.layout.imagepicker_item_image, parent, false)
+            ImagepickerItemImageBinding.inflate(inflater, parent, false).root
         return ImageViewHolder(itemView)
     }
 
@@ -177,10 +178,11 @@ class ImagePickerAdapter(
         val gifIndicator: View
 
         init {
-            container = itemView as FrameLayout
-            image = itemView.image_thumbnail
-            alphaView = itemView.view_alpha
-            gifIndicator = itemView.gif_indicator
+            val binding = ImagepickerItemImageBinding.bind(itemView)
+            container = binding.root
+            image = binding.imageThumbnail
+            alphaView = binding.viewAlpha
+            gifIndicator = binding.gifIndicator
         }
     }
 

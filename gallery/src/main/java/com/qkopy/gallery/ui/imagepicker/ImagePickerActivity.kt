@@ -28,6 +28,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.qkopy.gallery.R
+import com.qkopy.gallery.databinding.ImagepickerActivityPickerBinding
 import com.qkopy.gallery.helper.CameraHelper
 import com.qkopy.gallery.helper.LogHelper
 import com.qkopy.gallery.helper.PermissionHelper
@@ -39,7 +40,6 @@ import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.model.Image
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.imagepicker_activity_picker.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -59,6 +59,8 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     private val logger = LogHelper.instance
 
     private var images: List<Image>? = null
+
+    private lateinit var binding: ImagepickerActivityPickerBinding
 
     private val imageClickListener = object : OnImageClickListener {
         override fun onImageClick(view: View, position: Int, isSelected: Boolean): Boolean {
@@ -93,8 +95,9 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         if (config.isKeepScreenOn) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
-
-        setContentView(R.layout.imagepicker_activity_picker)
+        binding=ImagepickerActivityPickerBinding.inflate(layoutInflater)
+//        setContentView(R.layout.imagepicker_activity_picker)
+        setContentView(binding.root)
 
         setupView()
         setupComponents()
@@ -111,15 +114,15 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
         }
 
 
-        progressWheel.setBarColor(config.getProgressBarColor())
-        container.setBackgroundColor(config.getBackgroundColor())
+        binding.progressWheel.setBarColor(config.getProgressBarColor())
+        binding.container.setBackgroundColor(config.getBackgroundColor())
 
 
     }
 
     private fun setupComponents() {
         recyclerViewManager =
-            RecyclerViewManager(recyclerView!!, config, resources.configuration.orientation)
+            RecyclerViewManager(binding.recyclerView, config, resources.configuration.orientation)
         recyclerViewManager.setupAdapters(imageClickListener, folderClickListener)
         recyclerViewManager.setOnImageSelectionListener(object : OnImageSelectionListener {
             override fun onSelectionUpdate(images: List<Image>) {
@@ -135,7 +138,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     private fun setupToolbar() {
-        toolbar.let { imagePickerToolbar ->
+        binding.toolbar.let { imagePickerToolbar ->
             config.let { imagePickerToolbar.config(it) }
             imagePickerToolbar.setOnBackClickListener(backClickListener)
             imagePickerToolbar.setOnCameraClickListener(cameraClickListener)
@@ -174,9 +177,9 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     private fun invalidateToolbar() {
-        toolbar.setTitle(recyclerViewManager.getTitle()!!)
-        toolbar.showDoneButton(recyclerViewManager.isShowDoneButton)
-        toolbar.updateSelectedCount(recyclerViewManager.selectedMediaCount())
+       binding. toolbar.setTitle(recyclerViewManager.getTitle()!!)
+        binding.toolbar.showDoneButton(recyclerViewManager.isShowDoneButton)
+        binding.toolbar.updateSelectedCount(recyclerViewManager.selectedMediaCount())
 
     }
 
@@ -228,7 +231,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
 
                 override fun onPermissionDisabled() {
                     Log.d("GPERM", "onPermissionDisabled()")
-                    snackbar
+                    binding.snackbar
                         .show(R.string.msg_no_write_external_storage_permission,
                             View.OnClickListener {
                                 PermissionHelper.openAppSettings(
@@ -284,13 +287,11 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
                 }
 
                 override fun onPermissionDisabled() {
-                    snackbar.show(R.string.msg_no_camera_permission,
-                        object : View.OnClickListener {
-                            override fun onClick(v: View?) {
-                                PermissionHelper.openAppSettings(
-                                    this@ImagePickerActivity
-                                )
-                            }
+                    binding. snackbar.show(R.string.msg_no_camera_permission,
+                        View.OnClickListener {
+                            PermissionHelper.openAppSettings(
+                                this@ImagePickerActivity
+                            )
                         })
                 }
 
@@ -493,9 +494,9 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
      */
 
     override fun showLoading(isLoading: Boolean) {
-        progressWheel.visibility = if (isLoading) View.VISIBLE else View.GONE
-        recyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
-        layout_empty.visibility = View.GONE
+        binding.progressWheel.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding. recyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
+        binding. layoutEmpty.visibility = View.GONE
     }
 
     //Here set data to adapter and add data to adapter when an image is found
@@ -530,9 +531,9 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerView {
     }
 
     override fun showEmpty() {
-        progressWheel.visibility = View.GONE
-        recyclerView!!.visibility = View.GONE
-        layout_empty.visibility = View.VISIBLE
+        binding.progressWheel.visibility = View.GONE
+        binding. recyclerView.visibility = View.GONE
+        binding.layoutEmpty.visibility = View.VISIBLE
     }
 
     override fun showCapturedImage(images: List<Image>?) {

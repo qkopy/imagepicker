@@ -8,13 +8,14 @@ package com.qkopy.gallery.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import com.qkopy.gallery.R
+import com.qkopy.gallery.databinding.ImagepickerToolbarBinding
 import com.qkopy.gallery.model.Config
-import kotlinx.android.synthetic.main.imagepicker_toolbar.view.*
 
 
 class ImagePickerToolbar : RelativeLayout {
@@ -43,16 +44,21 @@ class ImagePickerToolbar : RelativeLayout {
     }
 
     private fun init(context: Context) {
-        View.inflate(context, R.layout.imagepicker_toolbar, this)
+        val binding = ImagepickerToolbarBinding
+            .inflate(
+                LayoutInflater.from(context), this
+            )
+
+        //View.inflate(context, R.layout.imagepicker_toolbar, this)
         if (isInEditMode) {
             return
         }
 
-        titleText = text_toolbar_title
-        selectedText = text_toolbar_count
-        doneText = text_toolbar_done
-        backImage = image_toolbar_back
-        cameraImage = image_toolbar_camera
+        titleText = binding.textToolbarTitle
+        selectedText = binding.textToolbarCount
+        doneText = binding.textToolbarDone
+        backImage = binding.imageToolbarBack
+        cameraImage = binding.imageToolbarCamera
     }
 
     fun config(config: Config) {

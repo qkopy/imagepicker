@@ -9,11 +9,13 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "STORAGE_PATH", "\"Qkopy\""
         buildConfigField "String", "IMAGE_PATH", "\"Media/Qkopy/Images\""
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -26,6 +28,7 @@ android {
     kapt {
         generateStubs = true
     }
+    namespace 'com.qkopy.gallery'
 
 }
 

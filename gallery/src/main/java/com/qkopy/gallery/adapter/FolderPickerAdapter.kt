@@ -11,10 +11,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.qkopy.gallery.R
+import com.qkopy.gallery.databinding.ImagepickerItemFolderBinding
 import com.qkopy.gallery.listener.OnFolderClickListener
 import com.qkopy.gallery.model.Folder
 import com.qkopy.gallery.ui.common.BaseRecyclerViewAdapter
-import kotlinx.android.synthetic.main.imagepicker_item_folder.view.*
 import java.util.*
 
 class FolderPickerAdapter(
@@ -24,8 +24,7 @@ class FolderPickerAdapter(
     BaseRecyclerViewAdapter<FolderPickerAdapter.FolderViewHolder?>(context!!) {
     private val folders: MutableList<Folder> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderViewHolder {
-        val itemView: View =
-            inflater.inflate(R.layout.imagepicker_item_folder, parent, false)
+        val itemView = ImagepickerItemFolderBinding.inflate(inflater, parent, false).root
         return FolderViewHolder(itemView)
     }
 
@@ -84,9 +83,10 @@ class FolderPickerAdapter(
         val count: TextView
 
         init {
-            image = itemView.image_folder_thumbnail
-            name = itemView.text_folder_name
-            count = itemView.text_photo_count
+            val binding = ImagepickerItemFolderBinding.bind(itemView)
+            image = binding.imageFolderThumbnail
+            name = binding.textFolderName
+            count = binding.textPhotoCount
         }
     }
 

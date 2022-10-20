@@ -11,48 +11,50 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.museon.gallerydemo.databinding.ActivityMainBinding
 import com.qkopy.gallery.model.Config
 import com.qkopy.gallery.model.Image
 import com.qkopy.gallery.ui.imagepicker.ImagePicker
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     private var images = ArrayList<Image>()
+    private lateinit var binding: ActivityMainBinding
 
-    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-            images =
-                it.data!!.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
-                    ?: arrayListOf()
-            val imageFile = File(images[0].path)
-            //createFile()
-            imageview.setImageURI(Uri.fromFile(imageFile))
-            images.forEach {
-                Log.d("Image:", it.path)
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                images =
+                    it.data!!.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
+                        ?: arrayListOf()
+                val imageFile = File(images[0].path)
+                //createFile()
+                binding.imageview.setImageURI(Uri.fromFile(imageFile))
+                images.forEach {
+                    Log.d("Image:", it.path)
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        button.setOnClickListener {
+        binding.button.setOnClickListener {
             startFoldersList()
         }
-        btn.setOnClickListener {
+        binding.btn.setOnClickListener {
             startImagesList()
         }
 
-        btnTest.setOnClickListener {
+        binding.btnTest.setOnClickListener {
             openImagePicker()
         }
-        btn_test.setOnClickListener {
+        binding.btnTest.setOnClickListener {
             ImagePicker.with(this)
                 .setFolderMode(true)
                 .setCameraOnly(false)
@@ -94,7 +96,7 @@ class MainActivity : AppCompatActivity() {
             .setRequestCode(100)
             .setKeepScreenOn(true)
             .intent
-            //.start()
+        //.start()
         imagePickerLauncher.launch(pickerIntent)
     }
 
@@ -116,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             .setRequestCode(100)
             .setKeepScreenOn(true)
             .intent
-           // .start()
+        // .start()
         imagePickerLauncher.launch(pickerIntent)
 
     }
@@ -137,7 +139,7 @@ class MainActivity : AppCompatActivity() {
             .setRequestCode(100)
             .setKeepScreenOn(true)
             .intent
-           // .start()
+        // .start()
         imagePickerLauncher.launch(pickerIntent)
 
     }
@@ -177,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                     ?: arrayListOf()
             val imageFile = File(images[0].path)
             createFile()
-            imageview.setImageURI(Uri.fromFile(imageFile))
+            binding.imageview.setImageURI(Uri.fromFile(imageFile))
 //            val bitmap = BitmapFactory.decodeFile(imageFile.path)
 //            val palette = Palette.from(bitmap).setRegion(0,0,bitmap.width/2,bitmap.height/2)
 //                .generate()
@@ -196,12 +198,12 @@ class MainActivity : AppCompatActivity() {
             //adapter!!.setData(images)
         }
 
-        if (requestCode == 987&& resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == 987 && resultCode == Activity.RESULT_OK && data != null) {
             images =
                 data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES) as? ArrayList<Image>
                     ?: arrayListOf()
-           // val imageFile = File(images[0].path)
-           // createFile()
+            // val imageFile = File(images[0].path)
+            // createFile()
             val opt = BitmapFactory.Options()
             opt.inJustDecodeBounds = true
             BitmapFactory.decodeFile(images[0].path, opt)
@@ -209,7 +211,7 @@ class MainActivity : AppCompatActivity() {
             opt.inSampleSize = inSample
             opt.inJustDecodeBounds = false
             val bmap = BitmapFactory.decodeFile(images[0].path, opt)
-            Log.d("BMAP::","${bmap?.width}x${bmap?.height}")
+            Log.d("BMAP::", "${bmap?.width}x${bmap?.height}")
             //val tempFile = File.createTempFile("test"+"_comp", ".jpg")
 
             val view = RelativeLayout(this)
@@ -228,8 +230,8 @@ class MainActivity : AppCompatActivity() {
             //Assign a size and position to the view and all of its descendants
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
             val bmapN = getBitmapFromView(view)
-            imageview.setImageBitmap(bmapN)
-            Log.d("BMAPN::","${bmapN?.width}x${bmapN?.height}")
+            binding.imageview.setImageBitmap(bmapN)
+            Log.d("BMAPN::", "${bmapN?.width}x${bmapN?.height}")
 
         }
     }
